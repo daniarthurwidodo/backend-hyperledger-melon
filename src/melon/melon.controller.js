@@ -2,22 +2,32 @@ const { Router } = require("express");
 const router = Router();
 const User = require("../user/user.model"); // import user model
 const Melon = require("../melon/melon.model");
-router.get("/", (req, res) => {
+router.get("/:userId", async (req, res) => {
+
+
   try {
-    res.status(200).send({}).end();
+    const userId = req.params.userId;
+    const findUser = await User.findOne({ username: userId });
+    const data = await Melon.find({ user: findUser._id})
+      .skip(req.query.page)
+      .limit(req.query.per_page)
+
+    res.status(200).send({
+      status: true,
+      message: data,
+    }).end();
   } catch (error) {
     res
       .status(400)
       .send({
         status: false,
-        message: "",
+        message: "user not found",
       })
       .end();
   }
 });
 
 router.post("/:userId", async (req, res) => {
-
   try {
     const userId = req.params.userId;
     const findUser = await User.findOne({ username: userId });
