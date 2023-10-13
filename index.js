@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const { log } = require("mercedlogger") 
 const { readFile } = require('fs/promises')
 const userController = require('./src/user/user.controller')
-const monitorController = require('./src/monitor/monitor.controller') 
+const monitorController = require('./src/monitor/monitor.controller')
+const melonController = require('./src/melon/melon.controller') 
 
 const config = require('./config.json')
 
@@ -14,7 +15,7 @@ const app =  express()
 app.use(express.json())
 app.use("/user", userController)
 app.use("/monitor", monitorController)
-
+app.use("/melon", melonController)
 
 app.get( '/', (req, res ) => {
     res.send('hi mom')

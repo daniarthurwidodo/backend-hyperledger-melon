@@ -35,8 +35,10 @@ userRouter.post('/register', async (req, res) => {
 
 userRouter.post('/login', async (req, res) => {
     try {
-        const user = await User.findOne({ username: req.body.username, password: req.body.password });
-        if (user) {
+        const user = await User.findOne({ username: req.body.username });
+        const result = await bcrypt.compare(req.body.password, user.password);
+        
+        if (user && result ) {
             res.status(200).send({ "status": true, "message": user });
             res.end()
         } else if (!user) {
