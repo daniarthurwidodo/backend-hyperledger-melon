@@ -1,0 +1,4 @@
+{
+    "rabbitmq_url" : "amqps://kdtcfyod:eTJ4LSahQETvqpG73HlqcwNmQoTN_jmj@armadillo.rmq.cloudamqp.com/kdtcfyod",
+    "mongodb_url" : "mongodb+srv://workdaniarthurwidodo:OjWHN87KEQ7t0K8i@cluster0.kxugpca.mongodb.net/melonku?retryWrites=true&w=majority"
+}

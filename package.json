@@ -1,0 +1,24 @@
+{
+  "name": "backend-hyperledger-melon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "concurrently \"node src/monitor/monitor.consumer.js\" \"node index.js\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^8.2.1",
+    "express": "^4.18.2",
+    "fabric-ca-client": "^2.2.19",
+    "fabric-network": "^2.2.19",
+    "mercedlogger": "^1.0.1",
+    "mongoose": "^7.6.1"
+  }
+}
