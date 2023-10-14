@@ -2,9 +2,8 @@ const { Router } = require("express");
 const router = Router();
 const User = require("../user/user.model"); // import user model
 const Melon = require("../melon/melon.model");
+
 router.get("/:userId", async (req, res) => {
-
-
   try {
     const userId = req.params.userId;
     const findUser = await User.findOne({ username: userId });
@@ -15,6 +14,27 @@ router.get("/:userId", async (req, res) => {
     res.status(200).send({
       status: true,
       message: data,
+    }).end();
+  } catch (error) {
+    res
+      .status(400)
+      .send({
+        status: false,
+        message: "user not found",
+      })
+      .end();
+  }
+});
+
+router.get("/qr/:melonId", async (req, res) => {
+  try {
+    const findMelonById = await Melon.findOne({ 
+      _id: req.params.melonId 
+    }).populate("user")
+
+    res.status(200).send({
+      status: true,
+      message: findMelonById,
     }).end();
   } catch (error) {
     res
