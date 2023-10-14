@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const { log } = require("mercedlogger") 
 const { readFile } = require('fs/promises')
@@ -11,7 +12,7 @@ const config = require('./config.json')
 const PORT = 4001
 // global middleware
 const app =  express()
-
+app.use(cors()) // add cors headers
 app.use(express.json())
 app.use("/user", userController)
 app.use("/monitor", monitorController)
