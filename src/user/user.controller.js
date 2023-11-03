@@ -33,6 +33,7 @@ userRouter.post("/register", async (req, res) => {
       res.end();
     }
   } catch (error) {
+    console.log(error)
     res.status(401).send({
         status: false,
         message: "harap periksa username / password",
