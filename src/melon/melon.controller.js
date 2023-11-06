@@ -7,14 +7,17 @@ router.get("/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
     const findUser = await User.findOne({ username: userId });
-    const data = await Melon.find({ user: findUser._id})
+    const data = await Melon.find({ user: findUser._id })
       .skip(req.query.page)
-      .limit(req.query.per_page)
+      .limit(req.query.per_page);
 
-    res.status(200).send({
-      status: true,
-      message: data,
-    }).end();
+    res
+      .status(200)
+      .send({
+        status: true,
+        message: data,
+      })
+      .end();
   } catch (error) {
     res
       .status(400)
@@ -28,14 +31,17 @@ router.get("/:userId", async (req, res) => {
 
 router.get("/qr/:melonId", async (req, res) => {
   try {
-    const findMelonById = await Melon.findOne({ 
-      _id: req.params.melonId 
-    }).populate("user")
+    const findMelonById = await Melon.findOne({
+      _id: req.params.melonId,
+    }).populate("user");
 
-    res.status(200).send({
-      status: true,
-      message: findMelonById,
-    }).end();
+    res
+      .status(200)
+      .send({
+        status: true,
+        message: findMelonById,
+      })
+      .end();
   } catch (error) {
     res
       .status(400)
@@ -60,9 +66,9 @@ router.post("/:userId", async (req, res) => {
       jenisTanaman: req.body.jenisTanaman,
       namaVarietas: req.body.namaVarietas,
       grade: req.body.grade,
-      kuantitas: req.body.kuantitas
-    }
-    await Melon.create(body)
+      kuantitas: req.body.kuantitas,
+    };
+    await Melon.create(body);
     res
       .status(200)
       .send({

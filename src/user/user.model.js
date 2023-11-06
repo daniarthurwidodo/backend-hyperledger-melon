@@ -7,8 +7,8 @@ const UserSchema = new mongoose.Schema({
     role: {type: String, required: true},
     nama: {type: String, required: true},
     email: {type: String, required: true},
-    noHandphone: {type: String, required: true}
-
+    noHandphone: {type: String, },
+    avatar: {type: String, default: ''}
 })
 
 // User model

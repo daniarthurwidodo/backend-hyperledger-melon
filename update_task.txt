@@ -1,0 +1,26 @@
+transaksi 
+- varietas
+- pengirim (user)
+- penerima (user)
+- suhu
+- tanggalTanam date
+- tanggalPanen date
+- kuantitas
+- harga
+- lamaSimpan number
+- status ['TERTUNDA', 'TERKONFIRMASI' , 'DITOLAK']
+
+user
+- endpoint update
+-- upload avatar
+- get all users with role petani
+
+
+monitoring
+- 
+
+anomali - history
+- date
+- suhu
+- message
+- status [ 'TDKSTANDAR' , 'TDKTERDETEKSI']

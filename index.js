@@ -6,6 +6,8 @@ const { readFile } = require('fs/promises')
 const userController = require('./src/user/user.controller')
 const monitorController = require('./src/monitor/monitor.controller')
 const melonController = require('./src/melon/melon.controller') 
+const transaksiController = require('./src/transaksi/transaksi.controller') 
+const path = require('path')
 
 const config = require('./config.json')
 
@@ -17,7 +19,10 @@ app.use(express.json())
 app.use("/user", userController)
 app.use("/monitor", monitorController)
 app.use("/melon", melonController)
+app.use("/transaksi", transaksiController)
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+console.log(__dirname);
 app.get( '/', (req, res ) => {
     res.send('hi mom')
 })
