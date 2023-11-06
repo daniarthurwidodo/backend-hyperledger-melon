@@ -8,7 +8,7 @@ anomaliRouter.post("/tambah/", async (req, res) => {
   try {
     let suhu = req.query.suhu;
     let status = req.query.status;
-    let tanggal = moment(req.query.tanggal).toISOString();
+    let tanggal = new Date(req.query.date);
 
     if (suhu && status && tanggal) {
       const data = await Anomali.create({
@@ -42,17 +42,17 @@ anomaliRouter.post("/tambah/", async (req, res) => {
 
 anomaliRouter.get("/", async (req, res) => {
   try {
-    let date = req.query.date;
+    let date = req.query.tanggal;
 
     if (date) {
-      date = moment(date).toISOString();
+      date = new Date(date)
       const message = await Anomali.find({ tanggal: date });
       res.status(200).send({
         status: true,
         message: message,
       });
       res.end();
-    } else {
+    } else if (!date) {
       const message = await Anomali.find();
       res.status(200).send({
         status: true,
