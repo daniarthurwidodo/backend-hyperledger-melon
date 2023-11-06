@@ -108,7 +108,7 @@ transaksiRouter.get("/all", async (req, res) => {
 transaksiRouter.put("/update/:transaksiId/:status", async (req, res) => {
   try {
     let transaksiId = req.params.transaksiId;
-    let status = req.params.transaksiId;
+    let status = req.params.status;
     if (transaksiId) {
       const data = await Transaksi.findOneAndUpdate(
         {
