@@ -47,6 +47,12 @@ transaksiRouter.post("/tambah/:status", async (req, res) => {
       });
       res.end();
     } else {
+      res.status(500).send({
+        status: false,
+        message: "transaksi gagal",
+        error: error,
+      });
+      res.end();
     }
   } catch (error) {
     res.status(500).send({
