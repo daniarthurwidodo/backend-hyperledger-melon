@@ -105,4 +105,35 @@ transaksiRouter.get("/all", async (req, res) => {
   }
 });
 
+transaksiRouter.put("/update/:transaksiId/:status", async (req, res) => {
+  try {
+    let transaksiId = req.params.transaksiId;
+    let status = req.params.transaksiId;
+    if (transaksiId) {
+      const data = await Transaksi.findOneAndUpdate(
+        {
+          transaksiId: transaksiId,
+        },
+        { status: status }
+      );
+      res.status(200).send({ status: true, message: data });
+      res.end();
+    } else {
+      res.status(500).send({
+        status: false,
+        message: "gagal update",
+        error: error,
+      });
+      res.end();
+    }
+  } catch (error) {
+    res.status(500).send({
+      status: false,
+      message: "gagal update",
+      error: error,
+    });
+    res.end();
+  }
+});
+
 module.exports = transaksiRouter;
