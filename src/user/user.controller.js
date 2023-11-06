@@ -62,13 +62,23 @@ userRouter.post("/login", async (req, res) => {
     if (user && result) {
       res.status(200).send({ status: true, message: user });
       res.end();
-    } else if (!user) {
+    } else if (!user && result == false) {
+      res.status(401).send({
+        status: false,
+        message: "harap periksa username / password",
+      });
+      res.end();
+    } else if (user && !result ){
       res.status(401).send({
         status: false,
         message: "harap periksa username / password",
       });
       res.end();
     } else {
+      res.status(401).send({
+        status: false,
+        message: "harap periksa username / password",
+      });
       res.end();
     }
   } catch (error) {
