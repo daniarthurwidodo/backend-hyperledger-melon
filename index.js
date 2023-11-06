@@ -7,6 +7,8 @@ const userController = require('./src/user/user.controller')
 const monitorController = require('./src/monitor/monitor.controller')
 const melonController = require('./src/melon/melon.controller') 
 const transaksiController = require('./src/transaksi/transaksi.controller') 
+const anomaliController = require('./src/anomali/anomali.controller') 
+
 const path = require('path')
 
 const config = require('./config.json')
@@ -20,6 +22,7 @@ app.use("/user", userController)
 app.use("/monitor", monitorController)
 app.use("/melon", melonController)
 app.use("/transaksi", transaksiController)
+app.use("/anomali", anomaliController)
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 console.log(__dirname);

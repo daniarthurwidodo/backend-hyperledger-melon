@@ -89,7 +89,6 @@ transaksiRouter.get("/all", async (req, res) => {
 
   console.log(status, user);
   try {
-
     res.status(200).send({
       status: true,
       message: status,
