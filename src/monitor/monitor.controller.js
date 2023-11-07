@@ -58,8 +58,6 @@ monitorRouter.get("/harian", async (req, res) => {
           $lt: tomorrowToISO,
         },
       });
-      console.log(data);
-      // const min = await Monitor.find({tanggal: date}).sort({a : 1}).limit(1)
       res
         .status(200)
         .send({
