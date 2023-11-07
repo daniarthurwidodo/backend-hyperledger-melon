@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 
 // User Schema
-const SuhuSchema = new mongoose.Schema({
+const MonitorSchema = new mongoose.Schema({
     deviceID: {type: String, required: true},
-    suhu: {type: String, required: true},
-    date: {type: Date, required: true},
-    sourceGudang: {type: String, required: true}
+    suhu: {type: Number, required: true},
+    tanggal: {type: Date, required: true},
+    status: {type: Number, required: true}
 })
 
 // User model
-const Suhu = mongoose.model('Suhu', SuhuSchema)
+const Monitor = mongoose.model('Monitor', MonitorSchema)
 
-module.exports = Suhu
+module.exports = Monitor

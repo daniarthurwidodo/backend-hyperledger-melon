@@ -1,7 +1,5 @@
 const { Router } = require("express");
 const Anomali = require("./anomali.model");
-const moment = require("moment");
-
 const anomaliRouter = Router();
 
 anomaliRouter.post("/tambah/", async (req, res) => {

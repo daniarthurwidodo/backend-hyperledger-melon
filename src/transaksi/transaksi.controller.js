@@ -1,9 +1,7 @@
 const { Router } = require("express");
 const Transaksi = require("./transaksi.model");
-const User = require("../user/user.model"); // import user model
-
+const User = require("../user/user.model"); 
 const { UUID } = require("bson");
-
 const transaksiRouter = Router();
 
 transaksiRouter.get("/generateId", (req, res) => {

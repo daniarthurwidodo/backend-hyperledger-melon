@@ -24,3 +24,38 @@ anomali - history
 - suhu
 - message
 - status [ 'TDKSTANDAR' , 'TDKTERDETEKSI']
+
+db.getCollection('monitors').aggregate(
+  [
+    {
+      $group: {
+        _id: null,
+        avg_suhu: { $avg: '$suhu' },
+        min_suhu: { $min: '$suhu' },
+        max_suhu: { $max: '$suhu' }
+      }
+    }
+  ],
+  { maxTimeMS: 60000, allowDiskUse: true }
+);
+
+{
+  tanggal: {
+    $gte: ISODate('2023-10-31T16:00:00.000+00:00'),
+    $lt: ISODate("2023-10-31T19:00:00.000+00:00")
+  }
+}
+
+24hr mongodb query
+{
+  tanggal: {
+    $gte: ISODate('2023-10-31T00:00:00.000+00:00'),
+    $lt: ISODate("2023-11-01T00:00:00.000+00:00")
+  }
+}
+
+currentDate = new Date("").toIsoString()
+tomorrow = new Date("").setHours(24)
+tomorrowISO = new Date("").toIsoString()
+
+Math.floor($avg)
