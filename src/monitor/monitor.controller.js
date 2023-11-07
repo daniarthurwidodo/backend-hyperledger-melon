@@ -101,19 +101,11 @@ monitorRouter.get("/all", async (req, res) => {
         },
       });
 
-      const aggregate = await  Monitor.aggregate(
-        [
-          {
-            $group: {
-              _id: null,
-              avg_suhu: { $avg: '$suhu' },
-              min_suhu: { $min: '$suhu' },
-              max_suhu: { $max: '$suhu' }
-            }
-          }
-        ],
-        { maxTimeMS: 60000, allowDiskUse: true }
-      )
+      let dataSuhu = []
+      const extractSuhu = data.forEach( (item) => {
+        dataSuhu.push(item.suhu)
+      })
+      const aggregate = findMinMaxAvg(dataSuhu)
 
       res
         .status(200)
@@ -141,6 +133,24 @@ monitorRouter.get("/all", async (req, res) => {
   }
 });
 
+const findMinMaxAvg= (array) => {
+  let sortedArray = array.sort()
+  let min = sortedArray[0]
+  let max = sortedArray[sortedArray.length -1]
+  let sum = calcAverage(array)
+  let avg = sum / array.length
+  return { min: min, max: max, avg: Math.floor(avg)}
+}
+
+const calcAverage = (array) =>{
+  let total = 0;
+  let count = 0;
+  array.forEach(function(item, index) {
+    total += item;
+    count++;
+  });
+  return total + count
+}
 
 // router.post("/tambah", async (req, res) => {
 //     try {
