@@ -88,6 +88,60 @@ monitorRouter.get("/harian", async (req, res) => {
   }
 });
 
+monitorRouter.get("/all", async (req, res) => {
+  try {
+    if (req.query.from && req.query.to) {
+      const fromDate = new Date(req.query.from).toISOString()
+      const toDate = new Date(req.query.to).toISOString()
+      
+      const data = await Monitor.find({
+        tanggal: {
+          $gte: fromDate,
+          $lt: toDate,
+        },
+      });
+
+      const aggregate = await  Monitor.aggregate(
+        [
+          {
+            $group: {
+              _id: null,
+              avg_suhu: { $avg: '$suhu' },
+              min_suhu: { $min: '$suhu' },
+              max_suhu: { $max: '$suhu' }
+            }
+          }
+        ],
+        { maxTimeMS: 60000, allowDiskUse: true }
+      )
+
+      res
+        .status(200)
+        .send({
+          status: true,
+          message: data,
+          aggregate: aggregate
+        })
+        .end();
+    } else {
+      res.status(500).send({
+        status: false,
+        message: "data gagal diambil",
+        error: error,
+      });
+      res.end();
+    }
+  } catch (error) {
+    res.status(500).send({
+      status: false,
+      message: "data gagal diambil",
+      error: error,
+    });
+    res.end();
+  }
+});
+
+
 // router.post("/tambah", async (req, res) => {
 //     try {
 //         let body = req.body
