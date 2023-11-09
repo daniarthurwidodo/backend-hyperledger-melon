@@ -1,6 +1,8 @@
 const { Router } = require("express");
 const Transaksi = require("./transaksi.model");
 const User = require("../user/user.model"); 
+const Melon = require("../melon/melon.model"); 
+
 const { UUID } = require("bson");
 const transaksiRouter = Router();
 
@@ -23,11 +25,13 @@ transaksiRouter.post("/tambah/:status", async (req, res) => {
   try {
     const pengirim = await User.findOne({ username: req.body.pengirim });
     const penerima = await User.findOne({ username: req.body.penerima });
+    const melon = await Melon.findOne({ _id: req.body.melon });
     if (pengirim && penerima) {
       await Transaksi.create({
         transaksiId: req.body.transaksiId,
         pengirim: pengirim._id,
         penerima: penerima._id,
+        melon: melon._id,
         tanggalTanam: req.body.tanggalTanam,
         tanggalPanen: req.body.tanggalPanen,
         kuantitas: req.body.kuantitas,
@@ -138,8 +142,30 @@ transaksiRouter.get("/:transaksiId", async (req, res) => {
   try {
     const data = await Transaksi.findOne({
       transaksiId: req.params.transaksiId,
-    }).populate(['pengirim', 'penerima']);
+    }).populate(['pengirim', 'penerima', 'melon']);
+    res
+      .status(200)
+      .send({
+        status: true,
+        message: data,
+      })
+      .end();
+  } catch (error) {
+    res
+      .status(400)
+      .send({
+        status: false,
+        message: "transaksi not found",
+      })
+      .end();
+  }
+});
 
+transaksiRouter.get("/user/:userId", async (req, res) => {
+  try {
+    const data = await Transaksi.find({
+      pengirim: req.params.userId,
+    }).populate(['pengirim', 'penerima', 'melon']);
     res
       .status(200)
       .send({
