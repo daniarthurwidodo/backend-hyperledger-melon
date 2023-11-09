@@ -3,6 +3,10 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const { log } = require("mercedlogger") 
 const { readFile } = require('fs/promises')
+const fs = require('fs');
+
+const https = require('https');
+
 const userController = require('./src/user/user.controller')
 const monitorController = require('./src/monitor/monitor.controller')
 const melonController = require('./src/melon/melon.controller') 
@@ -36,6 +40,14 @@ const db = mongoose.connection;
 db.on('error',() => log.red("ERROR CONNECTION", 'connection error:'));
 db.once('open', () => log.green("DATABASE STATUS", `Connected to mongo `));
 
-app.listen(PORT, () => {
+var key = fs.readFileSync(__dirname + '/certs/selfsigned.key');
+var cert = fs.readFileSync(__dirname + '/certs/selfsigned.crt');
+var options = {
+  key: key,
+  cert: cert
+};
+var server = https.createServer(options, app);
+
+server.listen(PORT, () => {
     log.green("SERVER STATUS", `server is running at port ${PORT}`)
 })
