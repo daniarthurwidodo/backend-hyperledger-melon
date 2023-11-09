@@ -47,7 +47,7 @@ router.get("/qr/:melonId", async (req, res) => {
       .status(400)
       .send({
         status: false,
-        message: "user not found",
+        message: "melon not found",
       })
       .end();
   }

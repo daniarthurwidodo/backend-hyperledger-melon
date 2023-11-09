@@ -134,4 +134,28 @@ transaksiRouter.put("/update/:transaksiId/:status", async (req, res) => {
   }
 });
 
+transaksiRouter.get("/:transaksiId", async (req, res) => {
+  try {
+    const data = await Transaksi.findOne({
+      transaksiId: req.params.transaksiId,
+    }).populate(['pengirim', 'penerima']);
+
+    res
+      .status(200)
+      .send({
+        status: true,
+        message: data,
+      })
+      .end();
+  } catch (error) {
+    res
+      .status(400)
+      .send({
+        status: false,
+        message: "transaksi not found",
+      })
+      .end();
+  }
+});
+
 module.exports = transaksiRouter;
