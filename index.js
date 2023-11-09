@@ -46,7 +46,9 @@ db.once("open", () => log.green("DATABASE STATUS", `Connected to mongo `));
 var key = fs.readFileSync(__dirname + "/certs/selfsigned.key");
 var cert = fs.readFileSync(__dirname + "/certs/selfsigned.crt");
 var options = {
-  rejectUnauthorized: false,
+    rejectUnauthorized: false,
+    requestCert: false,
+    agent: false,
   key: key,
   cert: cert,
 };
