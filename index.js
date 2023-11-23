@@ -8,7 +8,7 @@ const https = require("https"),
 
 const options = {
   key: fs.readFileSync("/etc/ssl/private/private.key"),
-  cert: fs.readFileSync("/etc/ssl/certs/ca_bundle.crt")
+  cert: fs.readFileSync("/etc/ssl/certs/certificate.crt")
 };
 
 
