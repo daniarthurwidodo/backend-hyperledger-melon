@@ -7,7 +7,7 @@ const https = require("https"),
  fs = require("fs");
 
 const options = {
-  key: fs.readFileSync("/etc/ssl/private/private.key"),
+  key: fs.readFileSync("/etc/ssl/private/private.pem"),
   cert: fs.readFileSync("/etc/ssl/certs/certificate.crt")
 };
 
@@ -51,4 +51,4 @@ app.listen(PORT, () => {
   log.green("SERVER STATUS", `server is running at port ${PORT}`);
 });
 
-https.createServer(options, app).listen(8080);
+https.createServer(options, app).listen(443);
