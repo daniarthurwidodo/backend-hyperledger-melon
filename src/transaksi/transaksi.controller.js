@@ -52,7 +52,6 @@ transaksiRouter.post("/tambah/:status", async (req, res) => {
       res.status(500).send({
         status: false,
         message: "transaksi gagal",
-        error: error,
       });
       res.end();
     }
@@ -124,7 +123,6 @@ transaksiRouter.put("/update/:transaksiId/:status", async (req, res) => {
       res.status(500).send({
         status: false,
         message: "gagal update",
-        error: error,
       });
       res.end();
     }

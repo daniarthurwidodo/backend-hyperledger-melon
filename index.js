@@ -29,7 +29,6 @@ app.use("/transaksi", transaksiController);
 app.use("/anomali", anomaliController);
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-console.log(__dirname);
 app.get("/", (req, res) => {
   res.send("hi mom");
 });
@@ -43,17 +42,6 @@ const db = mongoose.connection;
 db.on("error", () => log.red("ERROR CONNECTION", "connection error:"));
 db.once("open", () => log.green("DATABASE STATUS", `Connected to mongo `));
 
-var key = fs.readFileSync(__dirname + "/certs/selfsigned.key");
-var cert = fs.readFileSync(__dirname + "/certs/selfsigned.crt");
-var options = {
-    rejectUnauthorized: false,
-    requestCert: false,
-    agent: false,
-  key: key,
-  cert: cert,
-};
-var server = https.createServer(options, app);
-
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   log.green("SERVER STATUS", `server is running at port ${PORT}`);
 });
