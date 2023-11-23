@@ -3,9 +3,14 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const { log } = require("mercedlogger");
 const { readFile } = require("fs/promises");
-const fs = require("fs");
+const https = require("https"),
+ fs = require("fs");
 
-const https = require("https");
+const options = {
+  key: fs.readFileSync("/etc/ssl/private/private.key"),
+  cert: fs.readFileSync("/etc/ssl/certs/certificate.crt")
+};
+
 
 const userController = require("./src/user/user.controller");
 const monitorController = require("./src/monitor/monitor.controller");
@@ -45,3 +50,5 @@ db.once("open", () => log.green("DATABASE STATUS", `Connected to mongo `));
 app.listen(PORT, () => {
   log.green("SERVER STATUS", `server is running at port ${PORT}`);
 });
+
+https.createServer(options, app).listen(8080);
