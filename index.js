@@ -51,4 +51,4 @@ app.listen(PORT, () => {
   log.green("SERVER STATUS", `server is running at port ${PORT}`);
 });
 
-https.createServer(options, app).listen(443);
+https.createServer(options, app).listen(8080);
