@@ -2,13 +2,13 @@ const { Router } = require("express");
 const Transaksi = require("./transaksi.model");
 const User = require("../user/user.model"); 
 const Melon = require("../melon/melon.model"); 
-
+const { randomUUID } = require('crypto');
 const { UUID } = require("bson");
 const transaksiRouter = Router();
 
 transaksiRouter.get("/generateId", (req, res) => {
   try {
-    const randomId = new UUID().toBinary();
+    const randomId = randomUUID()
     res.status(200);
     res.send(randomId);
     res.end();
@@ -41,6 +41,7 @@ transaksiRouter.post("/tambah/:status", async (req, res) => {
         lamaSimpan: req.body.lamaSimpan,
         varietas: req.body.varietas,
         status: req.params.status,
+        jenisTransaksi: req.body.jenisTransaksi
       });
       console.log("transaksi berhasil ke database");
       res.status(200).send({
@@ -182,11 +183,12 @@ transaksiRouter.get("/user/:userId", async (req, res) => {
   }
 });
 
-transaksiRouter.get("/:userId/:status", async (req, res) => {
+transaksiRouter.get("/:userId/:status/:jenisTransaksi", async (req, res) => {
   try {
     const data = await Transaksi.find({
       pengirim: req.params.userId,
-      status: req.params.status
+      status: req.params.status,
+      jenisTransaksi: req.params.jenisTransaksi
     }).populate(['pengirim', 'penerima', 'melon']);
     res
       .status(200)
