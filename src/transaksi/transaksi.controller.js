@@ -182,4 +182,28 @@ transaksiRouter.get("/user/:userId", async (req, res) => {
   }
 });
 
+transaksiRouter.get("/:userId/:status", async (req, res) => {
+  try {
+    const data = await Transaksi.find({
+      pengirim: req.params.userId,
+      status: req.params.status
+    }).populate(['pengirim', 'penerima', 'melon']);
+    res
+      .status(200)
+      .send({
+        status: true,
+        message: data,
+      })
+      .end();
+  } catch (error) {
+    res
+      .status(400)
+      .send({
+        status: false,
+        message: "transaksi not found",
+      })
+      .end();
+  }
+});
+
 module.exports = transaksiRouter;
