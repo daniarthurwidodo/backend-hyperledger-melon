@@ -3,14 +3,6 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const { log } = require("mercedlogger");
 const { readFile } = require("fs/promises");
-const https = require("https"),
- fs = require("fs");
-
-const options = {
-  key: fs.readFileSync("/etc/ssl/private/private.key"),
-  cert: fs.readFileSync("/etc/ssl/certs/certificate.crt")
-};
-
 
 const userController = require("./src/user/user.controller");
 const monitorController = require("./src/monitor/monitor.controller");
@@ -51,4 +43,11 @@ app.listen(PORT, () => {
   log.green("SERVER STATUS", `server is running at port ${PORT}`);
 });
 
+const https = require("https"),
+ fs = require("fs");
+
+const options = {
+  key: fs.readFileSync("/etc/ssl/private/private.key"),
+  cert: fs.readFileSync("/etc/ssl/certs/certificate.crt")
+};
 https.createServer(options, app).listen(8080);

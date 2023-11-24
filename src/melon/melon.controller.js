@@ -53,6 +53,32 @@ router.get("/qr/:melonId", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  try {
+    // const findMelonById = await Melon.findOne({
+    //   _id: req.params.melonId,
+    // }).populate("user");
+
+    const findMelonById = await Melon.find().populate("user");
+
+    res
+      .status(200)
+      .send({
+        status: true,
+        message: findMelonById,
+      })
+      .end();
+  } catch (error) {
+    res
+      .status(400)
+      .send({
+        status: false,
+        message: "melon not found",
+      })
+      .end();
+  }
+});
+
 router.post("/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
