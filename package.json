@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node index.js",
-    "dev": "concurrently \"node src/monitor/monitor.consumer.js\" \"node index.js\"",
+    "start": "npx pm2 start index.js -i max",
+    "dev": "concurrently \"npx pm2 src/monitor/monitor.consumer.js\" \"npx pm2 index.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
