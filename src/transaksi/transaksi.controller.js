@@ -44,7 +44,8 @@ transaksiRouter.post("/tambah/:status", async (req, res) => {
         lamaSimpan: req.body.lamaSimpan,
         varietas: req.body.varietas,
         status: req.params.status,
-        jenisTransaksi: req.body.jenisTransaksi
+        jenisTransaksi: req.body.jenisTransaksi,
+        alasan: req.body.alasan
       });
       console.log("transaksi berhasil ke database");
       res.status(200).send({
