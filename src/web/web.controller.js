@@ -18,9 +18,9 @@ webRouter.post("/user/register", async (req, res) => {
       res.end();
     } else if (!user && req.body.role === "admin") {
       // hash the password
-      req.body.password = await bcrypt.hash(req.body.password, 10);
+      req.body.password = await webBcrypt.hash(req.body.password, 10);
       // create a new user
-      await User.create(req.body);
+      await userWebModel.create(req.body);
 
       console.log("user berhasil ke database");
       res.status(200).send({
