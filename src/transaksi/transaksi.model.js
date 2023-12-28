@@ -35,7 +35,7 @@ const TransaksiSchema = new mongoose.Schema({
   varietas: { type: String },
   jenisTransaksi: { type: String },
   alasan: { type: String },
-  tanggalTransaksi: new Date()
+  tanggalTransaksi: { type: Date }
 });
 
 // Melon model
