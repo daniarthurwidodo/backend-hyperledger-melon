@@ -144,7 +144,7 @@ transaksiRouter.put("/update/:transaksiId/:status", async (req, res) => {
   }
 });
 
-transaksiRouter.get("/:transaksiId", async (req, res) => {
+transaksiRouter.get("/qr/:transaksiId", async (req, res) => {
   try {
     const data = await Transaksi.findOne({
       transaksiId: req.params.transaksiId,
@@ -190,7 +190,7 @@ transaksiRouter.get("/user/:userId", async (req, res) => {
   }
 });
 
-transaksiRouter.get("/:userId/:status/:jenisTransaksi", async (req, res) => {
+transaksiRouter.get("/cari/:userId/:status/:jenisTransaksi", async (req, res) => {
   try {
     const data = await Transaksi.find({
       pengirim: req.params.userId,

@@ -9,6 +9,7 @@ const monitorController = require("./src/monitor/monitor.controller");
 const melonController = require("./src/melon/melon.controller");
 const transaksiController = require("./src/transaksi/transaksi.controller");
 const anomaliController = require("./src/anomali/anomali.controller");
+const webController = require("./src/web/web.controller");
 
 const path = require("path");
 
@@ -24,8 +25,9 @@ app.use("/monitor", monitorController);
 app.use("/melon", melonController);
 app.use("/transaksi", transaksiController);
 app.use("/anomali", anomaliController);
-
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/web", webController);
+
 app.get("/", (req, res) => {
   res.send("hi mom");
 });
@@ -43,11 +45,11 @@ app.listen(PORT, () => {
   log.green("SERVER STATUS", `server is running at port ${PORT}`);
 });
 
-const https = require("https"),
- fs = require("fs");
+// const https = require("https"),
+//  fs = require("fs");
 
-const options = {
-  key: fs.readFileSync("/etc/ssl/private/private.key"),
-  cert: fs.readFileSync("/etc/ssl/certs/certificate.crt")
-};
-https.createServer(options, app).listen(8080);
+// const options = {
+//   key: fs.readFileSync("/etc/ssl/private/private.key"),
+//   cert: fs.readFileSync("/etc/ssl/certs/certificate.crt")
+// };
+// https.createServer(options, app).listen(8080);
