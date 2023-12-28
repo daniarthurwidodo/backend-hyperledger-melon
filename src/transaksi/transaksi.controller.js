@@ -22,10 +22,13 @@ transaksiRouter.get("/generateId", (req, res) => {
 });
 
 transaksiRouter.post("/tambah/:status", async (req, res) => {
+  let pengirim;
+  let penerima;
+  let melon
   try {
-    const pengirim = await User.findOne({ username: req.body.pengirim });
-    const penerima = await User.findOne({ username: req.body.penerima });
-    const melon = await Melon.findOne({ _id: req.body.melon });
+     pengirim = await User.findOne({ username: req.body.pengirim });
+     penerima = await User.findOne({ username: req.body.penerima });
+     melon = await Melon.findOne({ _id: req.body.melon });
     if (pengirim && penerima) {
       await Transaksi.create({
         transaksiId: req.body.transaksiId,
@@ -64,11 +67,14 @@ transaksiRouter.post("/tambah/:status", async (req, res) => {
     });
     res.end();
   }
+
+  res.end()
 });
 
 transaksiRouter.get("/status/:status", async (req, res) => {
+  let status
   try {
-    const status = await Transaksi.find({ status: req.params.status });
+    status = await Transaksi.find({ status: req.params.status });
     res.status(200).send({
       status: true,
       message: status,
@@ -83,6 +89,7 @@ transaksiRouter.get("/status/:status", async (req, res) => {
     });
     res.end();
   }
+  res.end
 });
 
 transaksiRouter.get("/all", async (req, res) => {
@@ -206,6 +213,34 @@ transaksiRouter.get("/:userId/:status/:jenisTransaksi", async (req, res) => {
       })
       .end();
   }
+});
+
+transaksiRouter.get("/transaksi-masuk", async (req, res) => {
+
+  try {
+    // const data = await Transaksi.find({
+    //   penerima: req.body.userId,
+    //   status: req.body.status,
+    //   jenisTransaksi: "MASUK"
+    // }).populate(['pengirim', 'penerima', 'melon']);
+    res
+      .status(200)
+      .send({
+        status: true,
+        // message: data,
+        body: req.body
+      })
+      .end();
+  } catch (error) {
+    res
+      .status(400)
+      .send({
+        status: false,
+        message: "transaksi not found",
+      })
+      .end();
+  }
+
 });
 
 module.exports = transaksiRouter;
