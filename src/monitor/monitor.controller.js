@@ -100,7 +100,7 @@ monitorRouter.get("/all", async (req, res) => {
 
       let dataSuhu = []
       if (dataSuhu.length > 0) {
-        data.forEach( (item: any) => {
+        data.forEach( (items) => {
         dataSuhu.push(item.suhu)
       })
       let aggregate = findMinMaxAvg(dataSuhu)
