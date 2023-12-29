@@ -10,14 +10,14 @@ monitorRouter.post("/tambah", async (req, res) => {
     if (
       req.query.deviceID &&
       req.query.suhu &&
-      req.query.tanggal &&
+      // req.query.tanggal &&
       req.query.status
     ) {
       const data = await Monitor.create({
         suhu: req.query.suhu,
         deviceID: req.query.deviceID,
         status: req.query.status,
-        tanggal: req.query.tanggal,
+        tanggal: new Date(),
       });
       res.status(200);
       res.send({
@@ -31,7 +31,7 @@ monitorRouter.post("/tambah", async (req, res) => {
       res.send({
         status: false,
         message: "data tidak lengkap",
-        error: error,
+        // error: error,
       });
       res.end();
     }
@@ -87,7 +87,6 @@ monitorRouter.get("/harian", async (req, res) => {
 });
 
 monitorRouter.get("/all", async (req, res) => {
-  try {
     if (req.query.from && req.query.to) {
       const fromDate = new Date(req.query.from).toISOString()
       const toDate = new Date(req.query.to).toISOString()
@@ -101,40 +100,27 @@ monitorRouter.get("/all", async (req, res) => {
 
       let dataSuhu = []
       if (dataSuhu.length > 0) {
-          const extractSuhu = data.forEach( (item) => {
+        data.forEach( (item: any) => {
         dataSuhu.push(item.suhu)
       })
-      var aggregate = findMinMaxAvg(dataSuhu)
-      } else {
-
-      }
-    
-
+      let aggregate = findMinMaxAvg(dataSuhu)
       res
         .status(200)
         .send({
           status: true,
           message: data,
           aggregate: aggregate
-        })
-        .end();
+        }).end();
     } else {
       res.status(500).send({
         status: false,
         message: "data gagal diambil",
-        error: error,
+        // error: error,
       });
       res.end();
     }
-  } catch (error) {
-    res.status(500).send({
-      status: false,
-      message: "data gagal diambil",
-      error: error,
-    });
-    res.end();
-  }
-});
+  } 
+})
 
 const findMinMaxAvg= (array) => {
   let sortedArray = array.sort()

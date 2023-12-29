@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const MonitorSchema = new mongoose.Schema({
     deviceID: {type: String, required: true},
     suhu: {type: Number, required: true},
-    tanggal: {type: Date, required: true},
+    tanggal: {type: Date},
     status: {type: Number, required: true}
 })
 
