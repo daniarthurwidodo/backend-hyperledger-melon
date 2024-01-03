@@ -5,18 +5,16 @@ const Monitor = require("./monitor.model");
 const amqp = require("amqplib/callback_api");
 const config = require("../../config.json");
 
-monitorRouter.post("/tambah", async (req, res) => {
+// http://103.23.199.113:4001/monitor/add/:deviceID/:suhu/:lembab
+monitorRouter.get("/tambah/:deviceID/:suhu/:lembab", async (req, res) => {
   try {
     if (
-      req.query.deviceID &&
-      req.query.suhu &&
-      // req.query.tanggal &&
-      req.query.status
+      req.params.deviceID 
     ) {
       const data = await Monitor.create({
-        suhu: req.query.suhu,
-        deviceID: req.query.deviceID,
-        status: req.query.status,
+        suhu: req.params.suhu,
+        deviceID: req.params.deviceID,
+        lembab: req.params.lembab,
         tanggal: new Date(),
       });
       res.status(200);
@@ -31,7 +29,7 @@ monitorRouter.post("/tambah", async (req, res) => {
       res.send({
         status: false,
         message: "data tidak lengkap",
-        // error: error,
+        error: req.param.deviceID ,
       });
       res.end();
     }
@@ -101,7 +99,7 @@ monitorRouter.get("/all", async (req, res) => {
       let dataSuhu = []
       if (dataSuhu.length > 0) {
         data.forEach( (items) => {
-        dataSuhu.push(item.suhu)
+        return dataSuhu.push(items.suhu);
       })
       let aggregate = findMinMaxAvg(dataSuhu)
       res
