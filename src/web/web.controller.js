@@ -48,25 +48,19 @@ webRouter.post("/user/register", async (req, res) => {
 
 webRouter.post("/user/login", async (req, res) => {
   try {
-    const user = await userWebModel.findOne({ username: req.body.username });
-    const result = await webBcrypt.compare(req.body.password, user.password);
+    const user = await userWebModel.findOne({ email: req.body.email });
+    // const result = await webBcrypt.compare(req.body.password, user.password);
 
-    if (user && result && user.role === "admin") {
+    if (user &&  user.role === "admin") {
       res.status(200).send({ status: true, message: user });
       res.end();
-    } else if (user && result && user.role !== "admin") {
+    } else if (user &&  user.role !== "admin") {
       res.status(401).send({
         status: false,
         message: "anda bukan admin!",
       });
       res.end();
-    } else if (!user && result == false) {
-      res.status(401).send({
-        status: false,
-        message: "harap periksa username / password",
-      });
-      res.end();
-    } else if (user && !result) {
+    } else if (!user ) {
       res.status(401).send({
         status: false,
         message: "harap periksa username / password",
@@ -74,7 +68,6 @@ webRouter.post("/user/login", async (req, res) => {
       res.end();
     } else {
       console.log(user);
-      console.log(result);
       res.status(401).send({
         status: false,
         message: "harap periksa username / password",

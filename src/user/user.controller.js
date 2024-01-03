@@ -90,17 +90,18 @@ userRouter.post("/login", async (req, res) => {
   }
 });
 
-userRouter.put("/update/:user", upload.single("avatar"), async (req, res) => {
+userRouter.put("/update/:userID", upload.single("avatar"), async (req, res) => {
   try {
-    req.body.password = await bcrypt.hash(req.body.password, 10);
+    // req.body.password = await bcrypt.hash(req.body.password, 10);
     const user = await User.findOneAndUpdate(
-      { username: req.params.user },
+      { _id: req.params.userID },
       {
-        nama: req.body.nama,
-        password: req.body.password,
+        username: req.body.nama,
+        role: req.body.role,
         email: req.body.email,
         noHandphone: req.body.noHandphone,
         avatar: req.file.path,
+        statusVerifikasi: req.body.statusVerifikasi
       },
       { new: true }
     );
@@ -113,6 +114,7 @@ userRouter.put("/update/:user", upload.single("avatar"), async (req, res) => {
       error: error.message, // body: error.message
     });
     res.end();
+    // console.log(error);
   }
 });
 

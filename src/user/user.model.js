@@ -8,7 +8,8 @@ const UserSchema = new mongoose.Schema({
     nama: {type: String, required: true},
     email: {type: String, unique: true, required: true},
     noHandphone: {type: String, },
-    avatar: {type: String, default: ''}
+    avatar: {type: String, default: ''},
+    statusVerifikasi: {type: String}
 })
 
 // User model
