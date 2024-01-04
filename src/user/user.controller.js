@@ -247,7 +247,7 @@ userRouter.get("/role/:role", async (req, res) => {
 
 userRouter.get("/user/:userID", async (req, res) => {
   try {
-    const users = await User.findOne({ role: req.params.userID });
+    const users = await User.findOne({ _id: req.params.userID });
     res.status(200).send({ status: true, message: users });
     res.end();
   } catch (error) {
