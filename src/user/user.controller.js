@@ -19,9 +19,10 @@ const userRouter = Router();
 userRouter.post("/register", async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
-    if (user) {
+    const email = await User.findOne({ email: req.body.email });
+    if (user && email ) {
       console.log("user sudah registrasi");
-      res.status(201).send({
+      res.status(402).send({
         status: false,
         message: "user sudah pernah registrasi",
       });
