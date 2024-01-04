@@ -93,6 +93,7 @@ router.post("/:userId", async (req, res) => {
       namaVarietas: req.body.namaVarietas,
       grade: req.body.grade,
       kuantitas: req.body.kuantitas,
+      lokasiKebun: req.body.lokasiKebun
     };
     await Melon.create(body);
     res

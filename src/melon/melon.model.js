@@ -16,6 +16,7 @@ const MelonSchema = new mongoose.Schema({
   namaVarietas: { type: String },
   grade: { type: String },
   tanggalRegistrasi: { type: Date },
+  lokasiKebun: { type: String },
 });
 
 // Melon model
