@@ -175,9 +175,79 @@ userRouter.put("/ditolak/:userID", async (req, res) => {
   }
 });
 
+userRouter.put("/aktif/:userID", async (req, res) => {
+  try {
+    // req.body.password = await bcrypt.hash(req.body.password, 10);
+    const user = await User.findOneAndUpdate(
+      { _id: req.params.userID },
+      {
+        // username: req.body.nama,
+        // role: req.body.role,
+        // email: req.body.email,
+        // noHandphone: req.body.noHandphone,
+        // avatar: req.file.path,
+        statusVerifikasi: "AKTIF",
+      },
+      { new: true }
+    );
+    res.status(200).send({ status: true, message: user });
+    res.end();
+  } catch (error) {
+    res.status(401).send({
+      status: false,
+      message: "gagal update",
+      error: error.message, // body: error.message
+    });
+    res.end();
+    // console.log(error);
+  }
+});
+userRouter.put("/tidakAktif/:userID", async (req, res) => {
+  try {
+    // req.body.password = await bcrypt.hash(req.body.password, 10);
+    const user = await User.findOneAndUpdate(
+      { _id: req.params.userID },
+      {
+        // username: req.body.nama,
+        // role: req.body.role,
+        // email: req.body.email,
+        // noHandphone: req.body.noHandphone,
+        // avatar: req.file.path,
+        statusVerifikasi: "TIDAK AKTIF",
+      },
+      { new: true }
+    );
+    res.status(200).send({ status: true, message: user });
+    res.end();
+  } catch (error) {
+    res.status(401).send({
+      status: false,
+      message: "gagal update",
+      error: error.message, // body: error.message
+    });
+    res.end();
+    // console.log(error);
+  }
+});
+
 userRouter.get("/role/:role", async (req, res) => {
   try {
     const users = await User.find({ role: req.params.role });
+    res.status(200).send({ status: true, message: users });
+    res.end();
+  } catch (error) {
+    res.status(401).send({
+      status: false,
+      message: "gagal dapat user",
+      error: error,
+    });
+    res.end();
+  }
+});
+
+userRouter.get("/user/:userID", async (req, res) => {
+  try {
+    const users = await User.findOne({ role: req.params.userID });
     res.status(200).send({ status: true, message: users });
     res.end();
   } catch (error) {
