@@ -20,7 +20,7 @@ userRouter.post("/register", async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
     const email = await User.findOne({ email: req.body.email });
-    if (user && email ) {
+    if (user && email) {
       console.log("user sudah registrasi");
       res.status(402).send({
         status: false,
@@ -102,7 +102,7 @@ userRouter.put("/update/:userID", upload.single("avatar"), async (req, res) => {
         email: req.body.email,
         noHandphone: req.body.noHandphone,
         avatar: req.file.path,
-        statusVerifikasi: req.body.statusVerifikasi
+        statusVerifikasi: req.body.statusVerifikasi,
       },
       { new: true }
     );
@@ -119,7 +119,7 @@ userRouter.put("/update/:userID", upload.single("avatar"), async (req, res) => {
   }
 });
 
-userRouter.put("/aktivasi/:userID",  async (req, res) => {
+userRouter.put("/aktivasi/:userID", async (req, res) => {
   try {
     // req.body.password = await bcrypt.hash(req.body.password, 10);
     const user = await User.findOneAndUpdate(
@@ -130,7 +130,7 @@ userRouter.put("/aktivasi/:userID",  async (req, res) => {
         // email: req.body.email,
         // noHandphone: req.body.noHandphone,
         // avatar: req.file.path,
-        statusVerifikasi: "TERKONFIRMASI"
+        statusVerifikasi: "TERKONFIRMASI",
       },
       { new: true }
     );
@@ -147,7 +147,7 @@ userRouter.put("/aktivasi/:userID",  async (req, res) => {
   }
 });
 
-userRouter.put("/ditolak/:userID",  async (req, res) => {
+userRouter.put("/ditolak/:userID", async (req, res) => {
   try {
     // req.body.password = await bcrypt.hash(req.body.password, 10);
     const user = await User.findOneAndUpdate(
@@ -158,7 +158,7 @@ userRouter.put("/ditolak/:userID",  async (req, res) => {
         // email: req.body.email,
         // noHandphone: req.body.noHandphone,
         // avatar: req.file.path,
-        statusVerifikasi: "DITOLAK"
+        statusVerifikasi: "DITOLAK",
       },
       { new: true }
     );
@@ -178,6 +178,38 @@ userRouter.put("/ditolak/:userID",  async (req, res) => {
 userRouter.get("/role/:role", async (req, res) => {
   try {
     const users = await User.find({ role: req.params.role });
+    res.status(200).send({ status: true, message: users });
+    res.end();
+  } catch (error) {
+    res.status(401).send({
+      status: false,
+      message: "gagal dapat user",
+      error: error,
+    });
+    res.end();
+  }
+});
+
+userRouter.get("/all/dashboard", async (req, res) => {
+  try {
+    const users = await User.find({ role: "admin" });
+    res.status(200).send({ status: true, message: users });
+    res.end();
+  } catch (error) {
+    res.status(401).send({
+      status: false,
+      message: "gagal dapat user",
+      error: error,
+    });
+    res.end();
+  }
+});
+
+userRouter.get("/all/mobile", async (req, res) => {
+  try {
+    const users = await User.find({
+      $or: [{ role: "petani" }, { role: "distributor " }, {role: "retail"}],
+    });
     res.status(200).send({ status: true, message: users });
     res.end();
   } catch (error) {
