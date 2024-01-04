@@ -119,6 +119,62 @@ userRouter.put("/update/:userID", upload.single("avatar"), async (req, res) => {
   }
 });
 
+userRouter.put("/aktivasi/:userID",  async (req, res) => {
+  try {
+    // req.body.password = await bcrypt.hash(req.body.password, 10);
+    const user = await User.findOneAndUpdate(
+      { _id: req.params.userID },
+      {
+        // username: req.body.nama,
+        // role: req.body.role,
+        // email: req.body.email,
+        // noHandphone: req.body.noHandphone,
+        // avatar: req.file.path,
+        statusVerifikasi: "TERKONFIRMASI"
+      },
+      { new: true }
+    );
+    res.status(200).send({ status: true, message: user });
+    res.end();
+  } catch (error) {
+    res.status(401).send({
+      status: false,
+      message: "gagal update",
+      error: error.message, // body: error.message
+    });
+    res.end();
+    // console.log(error);
+  }
+});
+
+userRouter.put("/ditolak/:userID",  async (req, res) => {
+  try {
+    // req.body.password = await bcrypt.hash(req.body.password, 10);
+    const user = await User.findOneAndUpdate(
+      { _id: req.params.userID },
+      {
+        // username: req.body.nama,
+        // role: req.body.role,
+        // email: req.body.email,
+        // noHandphone: req.body.noHandphone,
+        // avatar: req.file.path,
+        statusVerifikasi: "DITOLAK"
+      },
+      { new: true }
+    );
+    res.status(200).send({ status: true, message: user });
+    res.end();
+  } catch (error) {
+    res.status(401).send({
+      status: false,
+      message: "gagal update",
+      error: error.message, // body: error.message
+    });
+    res.end();
+    // console.log(error);
+  }
+});
+
 userRouter.get("/role/:role", async (req, res) => {
   try {
     const users = await User.find({ role: req.params.role });
