@@ -246,8 +246,23 @@ userRouter.get("/role/:role", async (req, res) => {
 });
 
 userRouter.get("/user/:userID", async (req, res) => {
+  console.log(req.params.userID);
   try {
     const users = await User.findOne({ _id: req.params.userID });
+    res.status(200).send({ status: true, message: users });
+    res.end();
+  } catch (error) {
+    res.status(401).send({
+      status: false,
+      message: "gagal dapat user",
+      error: error,
+    });
+    res.end();
+  }
+});
+userRouter.delete("/user/:userID", async (req, res) => {
+  try {
+    const users = await User.findOneAndDelete({ _id: req.params.userID });
     res.status(200).send({ status: true, message: users });
     res.end();
   } catch (error) {
