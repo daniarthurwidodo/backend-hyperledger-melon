@@ -73,6 +73,58 @@ transaksiRouter.post("/tambah/:status", async (req, res) => {
   res.end()
 });
 
+transaksiRouter.post("/petani-ke-distributor", async (req, res) => {
+  let pengirim;
+  let penerima;
+  let melon
+  try {
+     pengirim = await User.findOne({ username: req.body.pengirim });
+     penerima = await User.findOne({ username: req.body.penerima });
+     melon = await Melon.findOne({ _id: req.body.melon });
+    if (pengirim && penerima) {
+      await Transaksi.create({
+        transaksiId: req.body.transaksiId,
+        pengirim: pengirim._id,
+        penerima: penerima._id,
+        melon: melon._id,
+        tanggalTanam: req.body.tanggalTanam,
+        tanggalPanen: req.body.tanggalPanen,
+        kuantitas: req.body.kuantitas,
+        jenisTanaman: req.body.jenisTanaman,
+        harga: req.body.harga,
+        suhu: req.body.suhu,
+        lamaSimpan: req.body.lamaSimpan,
+        varietas: req.body.varietas,
+        status: req.body.status,
+        jenisTransaksi: req.body.jenisTransaksi,
+        alasan: req.body.alasan,
+        tanggalTransaksi: new Date()
+      });
+      console.log("transaksi berhasil ke database");
+      res.status(200).send({
+        status: true,
+        message: req.body,
+      });
+      res.end();
+    } else {
+      res.status(500).send({
+        status: false,
+        message: "transaksi gagal",
+      });
+      res.end();
+    }
+  } catch (error) {
+    res.status(500).send({
+      status: false,
+      message: "transaksi gagal",
+      error: error,
+    });
+    res.end();
+  }
+
+  res.end()
+});
+
 transaksiRouter.get("/status/:status", async (req, res) => {
   let status
   try {
