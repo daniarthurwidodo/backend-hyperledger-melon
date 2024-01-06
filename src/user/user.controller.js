@@ -59,8 +59,7 @@ userRouter.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
     const result = await bcrypt.compare(req.body.password, user.password);
-
-    if (user && result) {
+    if (user && result && user.statusVerifikasi !== "DITOLAK") {
       res.status(200).send({ status: true, message: user });
       res.end();
     } else if (!user && result == false) {
