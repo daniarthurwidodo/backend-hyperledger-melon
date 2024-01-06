@@ -59,7 +59,14 @@ userRouter.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
     const result = await bcrypt.compare(req.body.password, user.password);
-    if (user && result && user.statusVerifikasi !== "DITOLAK") {
+    const status = () => {
+      if (user.statusVerifikasi == "TERKONFIRMASI") {
+        return true
+      } else {
+        return false
+      }
+    }
+    if (user && result && status() ) {
       res.status(200).send({ status: true, message: user });
       res.end();
     } else if (!user && result == false) {
@@ -78,6 +85,7 @@ userRouter.post("/login", async (req, res) => {
       res.status(401).send({
         status: false,
         message: "harap periksa username / password",
+        statusUser: user.statusVerifikasi
       });
       res.end();
     }
