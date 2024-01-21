@@ -120,7 +120,19 @@ transaksiRouter.get("/all", async (req, res) => {
         pengirim: req.query.pengirimId,
       })
         .skip(req.query.page)
-        .limit(req.query.perPage);
+        .limit(req.query.perPage).populate(["pengirim", "penerima", "melon"]);
+      res.status(200).send({
+        status: true,
+        message: status,
+      });
+      res.end();
+    } else if (req.query.penerimaId) {
+      const status = await Transaksi.find({
+        jenisTransaksi: req.query.jenisTransaksi,
+        penerima: req.query.penerimaId,
+      })
+        .skip(req.query.page)
+        .limit(req.query.perPage).populate(["pengirim", "penerima", "melon"]);
       res.status(200).send({
         status: true,
         message: status,
@@ -131,7 +143,8 @@ transaksiRouter.get("/all", async (req, res) => {
         jenisTransaksi: req.query.jenisTransaksi,
       })
         .skip(req.query.page)
-        .limit(req.query.perPage);
+        .limit(req.query.perPage)
+        .populate(["pengirim", "penerima", "melon"]);
       res.status(200).send({
         status: true,
         message: status,
@@ -180,7 +193,7 @@ transaksiRouter.get("/qr/:transaksiId", async (req, res) => {
   try {
     const data = await Transaksi.findOne({
       _id: req.params.transaksiId,
-    }).populate(["pengirim", "penerima", "melon", "timeline"]);
+    }).populate(["pengirim", "penerima", "melon"]);
     res
       .status(200)
       .send({
