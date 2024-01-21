@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 // Melon Schema
 const TransaksiSchema = new mongoose.Schema({
   // transaksiId: { type: String, unique: true, require: true },
-  _id: { type: Schema.Types.ObjectId, require: true, unique: true },
+  _id: { type: Schema.Types.ObjectId, require: true, },
   pengirim: [
     {
       type: Schema.Types.ObjectId,
@@ -37,7 +37,7 @@ const TransaksiSchema = new mongoose.Schema({
   alasan: { type: String },
   tanggalTransaksi: { type: Date },
   timeline: { type: Array, default: [] },
-});
+}, { _id: false });
 
 // Melon model
 const Transaksi = mongoose.model("Transaksi", TransaksiSchema);

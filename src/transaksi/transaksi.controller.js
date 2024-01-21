@@ -55,7 +55,7 @@ transaksiRouter.post("/tambah", async (req, res) => {
       // tx_terkonfirmasi_retail
       // tx_ditolak_retail
       timeline: [...req.body.timeline],
-    }
+    };
     if (pengirim && penerima) {
       await Transaksi.create(sendObj);
       console.log("transaksi berhasil ke database");
@@ -66,7 +66,6 @@ transaksiRouter.post("/tambah", async (req, res) => {
       res.end();
 
       // send to blockchain
-      
     } else {
       res.status(500).send({
         status: false,
@@ -111,17 +110,35 @@ transaksiRouter.get("/status/:jenisTransaksi", async (req, res) => {
 });
 
 transaksiRouter.get("/all", async (req, res) => {
-  const status = await Transaksi.find({});
-  const user = await User.find({});
+  // .skip(2).limit(5)
+  // const user = await User.find({});
   // console.log(status, user);
   try {
-    console.log(req.query.params);
-    // if(req.query.params)
-    res.status(200).send({
-      status: true,
-      message: status,
-    });
-    res.end();
+    if (req.query.pengirimId) {
+      const status = await Transaksi.find({
+        jenisTransaksi: req.query.jenisTransaksi,
+        pengirim: req.query.pengirimId,
+      })
+        .skip(req.query.page)
+        .limit(req.query.perPage);
+      res.status(200).send({
+        status: true,
+        message: status,
+      });
+      res.end();
+    } else {
+      const status = await Transaksi.find({
+        jenisTransaksi: req.query.jenisTransaksi,
+      })
+        .skip(req.query.page)
+        .limit(req.query.perPage);
+      res.status(200).send({
+        status: true,
+        message: status,
+      });
+      res.end();
+    }
+
     console.log("ambil semua data transaksi berhasil");
   } catch (error) {
     res.status(500).send({
