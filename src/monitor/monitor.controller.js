@@ -140,6 +140,26 @@ monitorRouter.get("/anomali", async (req, res) => {
   
 })
 
+monitorRouter.get("/suhu-terbaru", async (req, res) => {
+  if(req.query.deviceID){
+    const data = await Monitor.findOne({ deviceID: req.query.deviceID}).sort({ tanggal: 'desc'})
+    res
+    .status(200)
+    .send({
+      status: true,
+      message: data,
+    }).end();
+  } else {
+    res.status(500).send({
+      status: false,
+      message: "data gagal diambil",
+      // error: error,
+    });
+    res.end();
+  }
+  
+})
+
 const findMinMaxAvg= (array) => {
   let sortedArray = array.sort()
   let min = sortedArray[0]
