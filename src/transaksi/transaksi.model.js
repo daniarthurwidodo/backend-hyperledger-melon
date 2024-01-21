@@ -2,26 +2,27 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 // Melon Schema
 const TransaksiSchema = new mongoose.Schema({
-  transaksiId: { type: String, unique: true, require: true },
+  // transaksiId: { type: String, unique: true, require: true },
+  _id: { type: Schema.Types.ObjectId, require: true, unique: true },
   pengirim: [
     {
       type: Schema.Types.ObjectId,
       ref: "User",
-      require: true
+      require: true,
     },
   ],
   penerima: [
     {
       type: Schema.Types.ObjectId,
       ref: "User",
-      require: true
+      require: true,
     },
   ],
   melon: [
     {
       type: Schema.Types.ObjectId,
       ref: "Melon",
-      require: true
+      require: true,
     },
   ],
   tanggalTanam: { type: Date },
@@ -31,14 +32,11 @@ const TransaksiSchema = new mongoose.Schema({
   harga: { type: String },
   suhu: { type: String },
   lamaSimpan: { type: String },
-  status: { type: String },
   varietas: { type: String },
   jenisTransaksi: { type: String },
   alasan: { type: String },
   tanggalTransaksi: { type: Date },
-  timeline: [
-    { description: String , date: Date ,  user: String }
-  ]
+  timeline: { type: Array, default: [] },
 });
 
 // Melon model
