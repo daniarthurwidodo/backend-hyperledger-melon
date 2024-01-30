@@ -23,16 +23,29 @@ transaksiRouter.get("/generateId", (req, res) => {
 });
 
 transaksiRouter.post("/tambah", async (req, res) => {
-  let pengirim;
-  let penerima;
-  let melon;
-
-  let newId = new mongoose.mongo.ObjectId();
+  let errorMessage;
   try {
-    pengirim = await User.findOne({ username: req.body.pengirim });
-    penerima = await User.findOne({ username: req.body.penerima });
-    melon = await Melon.findOne({ _id: req.body.melon });
+    const pengirim = await User.findOne({ username: req.body.pengirim });
+    const penerima = await User.findOne({ username: req.body.penerima });
+    const melon = await Melon.findOne({ _id: req.body.melon });
 
+    if (!pengirim) {
+      let message = "pengirim tidak ditemukan";
+      errorMessage = message;
+      throw new Error(message);
+    }
+    if (!penerima) {
+      let message = "penerima tidak ditemukan";
+      errorMessage = message;
+      throw new Error(message);
+    }
+    if (!melon) {
+      let message = "melon tidak ditemukan";
+      errorMessage = message;
+      throw new Error(message);
+    }
+
+    console.log(pengirim, penerima);
     const sendObj = {
       _id: req.body.transaksiId,
       pengirim: pengirim._id,
@@ -54,10 +67,13 @@ transaksiRouter.post("/tambah", async (req, res) => {
       // tx_ditolak_distributor
       // tx_terkonfirmasi_retail
       // tx_ditolak_retail
+      isHide: req.body.isHide,
       timeline: [...req.body.timeline],
     };
     if (pengirim && penerima) {
-      await Transaksi.create(sendObj);
+      let _transaksi = await Transaksi.create(sendObj);
+      console.log(pengirim, pengirim);
+      console.log(_transaksi);
       console.log("transaksi berhasil ke database");
       res.status(200).send({
         status: true,
@@ -74,11 +90,12 @@ transaksiRouter.post("/tambah", async (req, res) => {
       });
       res.end();
     }
-  } catch (error) {
+  } catch (errorMessage) {
+    console.log(errorMessage);
     res.status(500).send({
       status: false,
       message: "transaksi gagal catch error",
-      error: error,
+      error: errorMessage,
     });
     res.end();
   }
@@ -91,6 +108,7 @@ transaksiRouter.get("/status/:jenisTransaksi", async (req, res) => {
   try {
     status = await Transaksi.find({
       jenisTransaksi: req.params.jenisTransaksi,
+      isHide: req.query.isHide,
     });
     res.status(200).send({
       status: true,
@@ -110,48 +128,21 @@ transaksiRouter.get("/status/:jenisTransaksi", async (req, res) => {
 });
 
 transaksiRouter.get("/all", async (req, res) => {
-  // .skip(2).limit(5)
-  // const user = await User.find({});
-  // console.log(status, user);
-  try {
-    if (req.query.pengirimId) {
-      const status = await Transaksi.find({
-        jenisTransaksi: req.query.jenisTransaksi,
-        pengirim: req.query.pengirimId,
-      })
-        .skip(req.query.page)
-        .limit(req.query.perPage).populate(["pengirim", "penerima", "melon"]);
-      res.status(200).send({
-        status: true,
-        message: status,
-      });
-      res.end();
-    } else if (req.query.penerimaId) {
-      const status = await Transaksi.find({
-        jenisTransaksi: req.query.jenisTransaksi,
-        penerima: req.query.penerimaId,
-      })
-        .skip(req.query.page)
-        .limit(req.query.perPage).populate(["pengirim", "penerima", "melon"]);
-      res.status(200).send({
-        status: true,
-        message: status,
-      });
-      res.end();
-    } else {
-      const status = await Transaksi.find({
-        jenisTransaksi: req.query.jenisTransaksi,
-      })
-        .skip(req.query.page)
-        .limit(req.query.perPage)
-        .populate(["pengirim", "penerima", "melon"]);
-      res.status(200).send({
-        status: true,
-        message: status,
-      });
-      res.end();
-    }
+  let query = req.query
 
+  try {
+    const status = await Transaksi.find({
+      ...query
+    })
+      .skip(req.query.page)
+      .limit(req.query.perPage)
+      .populate(["pengirim", "penerima", "melon"])
+      .exec();
+    res.status(200).send({
+      status: true,
+      message: status,
+    });
+    res.end();
     console.log("ambil semua data transaksi berhasil");
   } catch (error) {
     res.status(500).send({
@@ -163,22 +154,23 @@ transaksiRouter.get("/all", async (req, res) => {
   }
 });
 
-transaksiRouter.put("/update/:code/:transaksiId", async (req, res) => {
-  let transaksiId = req.params.transaksiId;
-  // let status = req.params.status;
+transaksiRouter.put("/update/:transaksiId", async (req, res) => {
+  let _transaksiId = req.params.transaksiId;
+  let updateObject = req.body
 
-  if (req.params.code) {
-  }
-
+  console.log(updateObject);
   try {
-    const data = await Transaksi.findOneAndUpdate(
-      {
-        transaksiId: transaksiId,
-      },
-      { status: req.body.status, timeline: req.body.timeline }
-    );
-    res.status(200).send({ status: true, message: data });
-    res.end();
+    if (_transaksiId) {
+      const data = await Transaksi.findOneAndUpdate(
+        {
+          _id: req.params.transaksiId,
+        },
+        { ...updateObject }
+      );
+      console.log(data, _transaksiId);
+      res.status(200).send({ status: true, message: data });
+      res.end();
+    }
   } catch (error) {
     res.status(500).send({
       status: false,

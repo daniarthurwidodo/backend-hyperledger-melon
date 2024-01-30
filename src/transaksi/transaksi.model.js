@@ -37,6 +37,7 @@ const TransaksiSchema = new mongoose.Schema({
   alasan: { type: String },
   tanggalTransaksi: { type: Date },
   timeline: { type: Array, default: [] },
+  isHide: {type: Boolean}
 }, { _id: false });
 
 // Melon model
