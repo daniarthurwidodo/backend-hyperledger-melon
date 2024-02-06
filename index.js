@@ -50,7 +50,7 @@ const https = require("https"),
  fs = require("fs");
 
 const options = {
-  key: fs.readFileSync("/etc/ssl/private/apache-selfsigned.key"),
-  cert: fs.readFileSync("/etc/ssl/certs/apache-selfsigned.crt")
+  key: fs.readFileSync("../private.key/"),
+  cert: fs.readFileSync("../ca_bundle.crt")
 };
 https.createServer(options, app).listen(8082);
