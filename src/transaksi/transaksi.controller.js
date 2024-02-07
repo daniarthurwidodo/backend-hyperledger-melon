@@ -62,6 +62,7 @@ transaksiRouter.post("/tambah", async (req, res) => {
       alasan: req.body.alasan,
       tanggalTransaksi: new Date(),
       jenisTransaksi: req.body.jenisTransaksi,
+      noRak: req.body.noRak,
       // tx_belum_terkonfirmasi
       // tx_terkonfirmasi_distributor
       // tx_ditolak_distributor

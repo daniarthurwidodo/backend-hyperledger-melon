@@ -31,6 +31,7 @@ const TransaksiSchema = new mongoose.Schema({
   jenisTanaman: { type: String },
   harga: { type: String },
   suhu: { type: String },
+  noRak: { type: String },
   lamaSimpan: { type: String },
   varietas: { type: String },
   jenisTransaksi: { type: String },
