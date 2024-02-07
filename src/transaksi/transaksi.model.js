@@ -15,7 +15,7 @@ const TransaksiSchema = new mongoose.Schema({
     {
       type: Schema.Types.ObjectId,
       ref: "User",
-      require: true,
+      require: false,
     },
   ],
   melon: [
