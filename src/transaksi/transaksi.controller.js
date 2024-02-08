@@ -45,7 +45,6 @@ transaksiRouter.post("/tambah", async (req, res) => {
       throw new Error(message);
     }
 
-    console.log(pengirim, penerima);
     const sendObj = {
       _id: req.body.transaksiId,
       pengirim: pengirim._id,
@@ -73,12 +72,10 @@ transaksiRouter.post("/tambah", async (req, res) => {
     };
     if (pengirim && penerima) {
       let _transaksi = await Transaksi.create(sendObj);
-      console.log(pengirim, pengirim);
-      console.log(_transaksi);
       console.log("transaksi berhasil ke database");
       res.status(200).send({
         status: true,
-        message: req.body,
+        message: _transaksi,
       });
       res.end();
 
@@ -100,7 +97,84 @@ transaksiRouter.post("/tambah", async (req, res) => {
     });
     res.end();
   }
+  res.end();
+});
 
+transaksiRouter.post("/tx-keluar", async (req, res) => {
+  let errorMessage;
+  try {
+    const pengirim = await User.findOne({ username: req.body.pengirim });
+    // const penerima = await User.findOne({ username: req.body.penerima });
+    const melon = await Melon.findOne({ _id: req.body.melon });
+
+    if (!pengirim) {
+      let message = "pengirim tidak ditemukan";
+      errorMessage = message;
+      throw new Error(message);
+    }
+    // if (!penerima) {
+    //   let message = "penerima tidak ditemukan";
+    //   errorMessage = message;
+    //   throw new Error(message);
+    // }
+    if (!melon) {
+      let message = "melon tidak ditemukan";
+      errorMessage = message;
+      throw new Error(message);
+    }
+
+    const sendObj = {
+      _id: req.body.transaksiId,
+      pengirim: pengirim._id,
+      // penerima: penerima._id,
+      melon: melon._id,
+      tanggalTanam: req.body.tanggalTanam,
+      tanggalPanen: req.body.tanggalPanen,
+      kuantitas: req.body.kuantitas,
+      jenisTanaman: req.body.jenisTanaman,
+      harga: req.body.harga,
+      suhu: req.body.suhu,
+      lamaSimpan: req.body.lamaSimpan,
+      varietas: req.body.varietas,
+      alasan: req.body.alasan,
+      tanggalTransaksi: new Date(),
+      jenisTransaksi: req.body.jenisTransaksi,
+      noRak: req.body.noRak,
+      // tx_belum_terkonfirmasi
+      // tx_terkonfirmasi_distributor
+      // tx_ditolak_distributor
+      // tx_terkonfirmasi_retail
+      // tx_ditolak_retail
+      isHide: req.body.isHide,
+      timeline: [...req.body.timeline],
+    };
+    if (pengirim) {
+      let _transaksi = await Transaksi.create(sendObj);
+      console.log("transaksi berhasil ke database");
+      res.status(200).send({
+        status: true,
+        message: _transaksi,
+      });
+      res.end();
+
+      // send to blockchain
+    } else {
+      res.status(500).send({
+        status: false,
+        message: "transaksi gagal else",
+        body: req.body,
+      });
+      res.end();
+    }
+  } catch (errorMessage) {
+    console.log(errorMessage);
+    res.status(500).send({
+      status: false,
+      message: "transaksi gagal catch error",
+      error: errorMessage,
+    });
+    res.end();
+  }
   res.end();
 });
 

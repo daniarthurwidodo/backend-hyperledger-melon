@@ -3,7 +3,7 @@ const express = require("express");
 const { log } = require("mercedlogger"); // import mercedlogger's log function
 const config = require("../../config.json");
 const mongoose = require("mongoose");
-const Suhu = require("./monitor.model");
+const Monitor = require("./monitor.model");
 
 const app = express();
 const PORT = 4002;
@@ -30,28 +30,30 @@ amqp.connect(config.rabbitmq_url, function (error0, connection) {
     if (error1) {
       throw error1;
     }
-
     var queue = "monitor";
-
     channel.assertQueue(queue, {
       durable: false,
     });
-
     console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queue);
-
     channel.consume(
       queue,
       async function (msg) {
         var obj = JSON.parse(msg.content.toString("utf-8"));
         console.log(" [x] Received %s", obj);
-
-        await Suhu.create(obj);
+        // await Suhu.create(obj);
+        const data = await Monitor.create({
+          suhu: obj.suhu,
+          deviceID: obj.deviceID,
+          lembab: obj.lembab,
+          tanggal: new Date(),
+        });
+        console.log("transaksi berhasil ke database");
       },
       {
         noAck: true,
       }
     );
-    // channel.ackAll()
+    channel.ackAll();
   });
 });
 

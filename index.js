@@ -46,11 +46,11 @@ app.listen(PORT, () => {
 });
 
 
-const https = require("https"),
- fs = require("fs");
+// const https = require("https"),
+//  fs = require("fs");
 
-const options = {
-  key: fs.readFileSync("../private.key"),
-  cert: fs.readFileSync("../certificate.crt")
-};
-https.createServer(options, app).listen(8082);
+// const options = {
+//   key: fs.readFileSync("../private.key"),
+//   cert: fs.readFileSync("../certificate.crt")
+// };
+// https.createServer(options, app).listen(8082);
