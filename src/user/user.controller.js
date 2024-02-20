@@ -101,6 +101,9 @@ userRouter.post("/login", async (req, res) => {
 userRouter.put("/update/:userID", upload.single("avatar"), async (req, res) => {
   try {
     // req.body.password = await bcrypt.hash(req.body.password, 10);
+    let avatar_path = req.file.path
+    avatar_path === undefined ? '' : req.file.path
+    
     const user = await User.findOneAndUpdate(
       { _id: req.params.userID },
       {
@@ -108,7 +111,7 @@ userRouter.put("/update/:userID", upload.single("avatar"), async (req, res) => {
         role: req.body.role,
         email: req.body.email,
         noHandphone: req.body.noHandphone,
-        avatar: req.file.path,
+        avatar: avatar_path,
         statusVerifikasi: req.body.statusVerifikasi,
       },
       { new: true }
