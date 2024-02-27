@@ -8,8 +8,6 @@ const Monitor = require("./monitor.model");
 const app = express();
 const PORT = 4002;
 
-// db connection
-// const { DATABASE_URL } = process.env
 mongoose.connect(config.mongodb_url, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

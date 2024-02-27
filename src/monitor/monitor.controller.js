@@ -15,6 +15,7 @@ monitorRouter.get("/tambah/:deviceID/:suhu/:lembab", async (req, res) => {
         lembab: req.params.lembab,
         tanggal: new Date(),
       };
+      // send to message broker
        amqp.sendToQueue(queue, data)
       res.status(200);
       res.send({
@@ -60,7 +61,6 @@ monitorRouter.get("/harian", async (req, res) => {
         .send({
           status: true,
           message: data,
-          // min: min
         })
         .end();
     } else {

@@ -62,11 +62,6 @@ transaksiRouter.post("/tambah", async (req, res) => {
       tanggalTransaksi: new Date(),
       jenisTransaksi: req.body.jenisTransaksi,
       noRak: req.body.noRak,
-      // tx_belum_terkonfirmasi
-      // tx_terkonfirmasi_distributor
-      // tx_ditolak_distributor
-      // tx_terkonfirmasi_retail
-      // tx_ditolak_retail
       isHide: req.body.isHide,
       timeline: [...req.body.timeline],
     };
@@ -104,7 +99,6 @@ transaksiRouter.post("/tx-keluar", async (req, res) => {
   let errorMessage;
   try {
     const pengirim = await User.findOne({ username: req.body.pengirim });
-    // const penerima = await User.findOne({ username: req.body.penerima });
     const melon = await Melon.findOne({ _id: req.body.melon });
 
     if (!pengirim) {
@@ -112,11 +106,6 @@ transaksiRouter.post("/tx-keluar", async (req, res) => {
       errorMessage = message;
       throw new Error(message);
     }
-    // if (!penerima) {
-    //   let message = "penerima tidak ditemukan";
-    //   errorMessage = message;
-    //   throw new Error(message);
-    // }
     if (!melon) {
       let message = "melon tidak ditemukan";
       errorMessage = message;
@@ -126,7 +115,6 @@ transaksiRouter.post("/tx-keluar", async (req, res) => {
     const sendObj = {
       _id: req.body.transaksiId,
       pengirim: pengirim._id,
-      // penerima: penerima._id,
       melon: melon._id,
       tanggalTanam: req.body.tanggalTanam,
       tanggalPanen: req.body.tanggalPanen,
@@ -140,11 +128,6 @@ transaksiRouter.post("/tx-keluar", async (req, res) => {
       tanggalTransaksi: new Date(),
       jenisTransaksi: req.body.jenisTransaksi,
       noRak: req.body.noRak,
-      // tx_belum_terkonfirmasi
-      // tx_terkonfirmasi_distributor
-      // tx_ditolak_distributor
-      // tx_terkonfirmasi_retail
-      // tx_ditolak_retail
       isHide: req.body.isHide,
       timeline: [...req.body.timeline],
     };
@@ -156,8 +139,6 @@ transaksiRouter.post("/tx-keluar", async (req, res) => {
         message: _transaksi,
       });
       res.end();
-
-      // send to blockchain
     } else {
       res.status(500).send({
         status: false,
