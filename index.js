@@ -34,8 +34,10 @@ app.get("/", (req, res) => {
 
 // db connection
 mongoose.connect(config.mongodb_url, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+  // useNewUrlParser: true,
+  // useUnifiedTopology: true
+  serverSelectionTimeoutMS: 5000,
+
 });
 const db = mongoose.connection;
 db.on("error", () => log.red("ERROR CONNECTION", "connection error:"));
