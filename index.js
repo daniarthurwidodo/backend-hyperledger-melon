@@ -34,9 +34,9 @@ app.get("/", (req, res) => {
 
 // db connection
 mongoose.connect(config.mongodb_url, {
-  // useNewUrlParser: true,
-  // useUnifiedTopology: true
-  serverSelectionTimeoutMS: 5000,
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+  // serverSelectionTimeoutMS: 5000,
 
 });
 const db = mongoose.connection;
