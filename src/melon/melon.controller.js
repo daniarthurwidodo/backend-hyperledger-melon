@@ -55,12 +55,7 @@ router.get("/qr/:melonId", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    // const findMelonById = await Melon.findOne({
-    //   _id: req.params.melonId,
-    // }).populate("user");
-
     const findMelonById = await Melon.find().populate("user");
-
     res
       .status(200)
       .send({
@@ -93,7 +88,7 @@ router.post("/:userId", async (req, res) => {
       namaVarietas: req.body.namaVarietas,
       grade: req.body.grade,
       kuantitas: req.body.kuantitas,
-      lokasiKebun: req.body.lokasiKebun
+      lokasiKebun: req.body.lokasiKebun,
     };
     await Melon.create(body);
     res
@@ -103,6 +98,29 @@ router.post("/:userId", async (req, res) => {
         message: body,
       })
       .end();
+  } catch (error) {
+    res
+      .status(400)
+      .send({
+        status: false,
+        message: "user not found",
+      })
+      .end();
+  }
+});
+
+router.put("/update/:melonId", async (req, res) => {
+  let melonId = req.params.melonId;
+  let body = req.body;
+  try {
+    const data = await Melon.findOneAndUpdate(
+      {
+        _id: melonId,
+      },
+      { ...body }
+    );
+    res.status(200).send({ status: true, message: data });
+    res.end();
   } catch (error) {
     res
       .status(400)

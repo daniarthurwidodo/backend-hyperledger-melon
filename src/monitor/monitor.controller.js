@@ -2,28 +2,34 @@ const { Router } = require("express"); // import router from express
 const monitorRouter = Router(); // create router to create route bundle
 const Monitor = require("./monitor.model");
 
-const amqp = require("amqplib/callback_api");
+const amqplib = require("amqplib");
 const config = require("../../config.json");
 
 monitorRouter.get("/tambah/:deviceID/:suhu/:lembab", async (req, res) => {
   try {
-    var queue = "monitor";
     if (req.params.deviceID) {
-      const data = {
+      let data = {
         suhu: req.params.suhu,
         deviceID: req.params.deviceID,
         lembab: req.params.lembab,
         tanggal: new Date(),
       };
       // send to message broker
-       amqp.sendToQueue(queue, data)
+      const queue = 'monitor';
+      const conn = await amqplib.connect('amqps://kdtcfyod:eTJ4LSahQETvqpG73HlqcwNmQoTN_jmj@armadillo.rmq.cloudamqp.com/kdtcfyod');
+       
+      // Sender
+      const ch2 = await conn.createChannel();
+      var json = JSON.stringify(data);
+      ch2.sendToQueue(queue, Buffer.from(json));
+
       res.status(200);
       res.send({
         status: true,
         message: data,
       });
       res.end();
-      console.log("transaksi berhasil ke database");
+      console.log("transaksi berhasil ke broker");
     } else {
       res.status(500);
       res.send({

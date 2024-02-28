@@ -248,7 +248,6 @@ transaksiRouter.put("/update-kuantitas/:transaksiId", async (req, res) => {
         },
         { kuantitas: req.body.kuantitas }
       );
-      console.log(data, _transaksiId);
       res.status(200).send({ status: true, message: data });
       res.end();
     }
