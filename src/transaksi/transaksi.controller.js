@@ -237,6 +237,31 @@ transaksiRouter.put("/update/:transaksiId", async (req, res) => {
   }
 });
 
+transaksiRouter.put("/update-kuantitas/:transaksiId", async (req, res) => {
+  let _transaksiId = req.params.transaksiId;
+
+  try {
+    if (_transaksiId) {
+      const data = await Transaksi.findOneAndUpdate(
+        {
+          _id: req.params.transaksiId,
+        },
+        { kuantitas: req.body.kuantitas }
+      );
+      console.log(data, _transaksiId);
+      res.status(200).send({ status: true, message: data });
+      res.end();
+    }
+  } catch (error) {
+    res.status(500).send({
+      status: false,
+      message: "gagal update",
+      error: error,
+    });
+    res.end();
+  }
+});
+
 transaksiRouter.get("/qr/:transaksiId", async (req, res) => {
   try {
     const data = await Transaksi.findOne({
