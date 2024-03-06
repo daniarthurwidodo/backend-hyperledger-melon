@@ -27,13 +27,13 @@ const consumeMessage = async () => {
   );
 
   const ch1 = await conn.createChannel();
-  await ch1.assertQueue(queue);
+  await ch1.assertQueue(queue, { ack: true });
 
   // Listener
   ch1.consume(queue, async (msg) => {
     if (msg !== null) {
       console.log("Recieved:", msg.content.toString());
-      ch1.ack(msg);
+      // ch1.ack(msg);
 
       let obj = JSON.parse(msg.content.toString());
       const data = await Monitor.create({

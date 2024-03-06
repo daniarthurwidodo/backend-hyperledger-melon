@@ -74,7 +74,6 @@ transaksiRouter.post("/tambah", async (req, res) => {
       });
       res.end();
 
-      // send to blockchain
     } else {
       res.status(500).send({
         status: false,

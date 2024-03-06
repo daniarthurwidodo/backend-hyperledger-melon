@@ -15,9 +15,11 @@ monitorRouter.get("/tambah/:deviceID/:suhu/:lembab", async (req, res) => {
         tanggal: new Date(),
       };
       // send to message broker
-      const queue = 'monitor';
-      const conn = await amqplib.connect('amqps://kdtcfyod:eTJ4LSahQETvqpG73HlqcwNmQoTN_jmj@armadillo.rmq.cloudamqp.com/kdtcfyod');
-       
+      const queue = "monitor";
+      const conn = await amqplib.connect(
+        "amqps://kdtcfyod:eTJ4LSahQETvqpG73HlqcwNmQoTN_jmj@armadillo.rmq.cloudamqp.com/kdtcfyod"
+      );
+
       // Sender
       const ch2 = await conn.createChannel();
       var json = JSON.stringify(data);
@@ -163,6 +165,50 @@ monitorRouter.get("/suhu-terbaru", async (req, res) => {
       status: false,
       message: "data gagal diambil",
       // error: error,
+    });
+    res.end();
+  }
+});
+
+monitorRouter.get("/notif", async (req, res) => {
+  const _deviceID = req.query.deviceID;
+  try {
+    if (
+      _deviceID == "gudangPetani" ||
+      _deviceID == "gudangDistributor" ||
+      _deviceID == "gudangRetail"
+    ) {
+      const data = await Monitor.find({
+        isAnomali: true,
+        deviceID: _deviceID,
+      }).sort({
+        tanggal: "desc",
+      });
+
+      res
+        .status(200)
+        .send({
+          status: true,
+          message: data,
+        })
+        .end();
+    } else {
+      const data = await Monitor.find({ isAnomali: true }).sort({
+        tanggal: "desc",
+      });
+
+      res
+        .status(200)
+        .send({
+          status: true,
+          message: data,
+        })
+        .end();
+    }
+  } catch (error) {
+    res.status(500).send({
+      status: false,
+      message: "data gagal diambil",
     });
     res.end();
   }
