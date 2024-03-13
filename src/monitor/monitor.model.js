@@ -6,7 +6,8 @@ const MonitorSchema = new mongoose.Schema({
     suhu: {type: Number, required: true},
     tanggal: {type: Date},
     lembab: {type: Number, required: true},
-    isAnomali: {type: Boolean}
+    isAnomali: {type: Boolean},
+    isView: {type: Boolean, default: false}
 })
 
 // User model

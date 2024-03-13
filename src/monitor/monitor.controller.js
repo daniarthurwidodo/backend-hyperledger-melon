@@ -1,8 +1,9 @@
 const { Router } = require("express"); // import router from express
 const monitorRouter = Router(); // create router to create route bundle
 const Monitor = require("./monitor.model");
-
+const mongoose = require("mongoose");
 const amqplib = require("amqplib");
+
 const config = require("../../config.json");
 
 monitorRouter.get("/tambah/:deviceID/:suhu/:lembab", async (req, res) => {
@@ -15,15 +16,15 @@ monitorRouter.get("/tambah/:deviceID/:suhu/:lembab", async (req, res) => {
         tanggal: new Date(),
       };
       // send to message broker
-      const queue = "monitor";
-      const conn = await amqplib.connect(
-        "amqps://kdtcfyod:eTJ4LSahQETvqpG73HlqcwNmQoTN_jmj@armadillo.rmq.cloudamqp.com/kdtcfyod"
-      );
+      // const queue = "monitor";
+      // const conn = await amqplib.connect(
+      //   "amqps://kdtcfyod:eTJ4LSahQETvqpG73HlqcwNmQoTN_jmj@armadillo.rmq.cloudamqp.com/kdtcfyod"
+      // );
 
       // Sender
-      const ch2 = await conn.createChannel();
-      var json = JSON.stringify(data);
-      ch2.sendToQueue(queue, Buffer.from(json));
+      // const ch2 = await conn.createChannel();
+      // var json = JSON.stringify(data);
+      // ch2.sendToQueue(queue, Buffer.from(json));
 
       res.status(200);
       res.send({
@@ -51,6 +52,49 @@ monitorRouter.get("/tambah/:deviceID/:suhu/:lembab", async (req, res) => {
     res.end();
   }
 });
+
+monitorRouter.get(
+  "/view/:monitorID",
+  async (req, res) => {
+    let monitorID = req.params.monitorID;
+    let validId = mongoose.isValidObjectId(monitorID);
+
+    if (validId) {
+      let id = new mongoose.Types.ObjectId(monitorID);
+
+      await Monitor.findOneAndUpdate({ _id: id }, {isView: true})
+        .then(function (models) {
+          if (models) {
+            res.status(200);
+            res.send({
+              status: true,
+              message: `ID ${id} sudah terupdate `,
+              data: models,
+            });
+            res.end();
+          } else {
+            res.status(500);
+            res.send({
+              status: false,
+              message: "id tidak ditemukan",
+            });
+            res.end();
+          }
+        })
+        .catch(function (err) {
+          console.log("error", err);
+        });
+    } else if (!validId) {
+      res.status(500);
+      res.send({
+        status: false,
+        message: "id tidak valid",
+      });
+      res.end();
+    }
+  }
+
+);
 
 monitorRouter.get("/harian", async (req, res) => {
   try {
