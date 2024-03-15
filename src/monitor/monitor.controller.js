@@ -9,12 +9,20 @@ const config = require("../../config.json");
 monitorRouter.get("/tambah/:deviceID/:suhu/:lembab", async (req, res) => {
   try {
     if (req.params.deviceID) {
-      let data = {
+      // let data = {
+      //   suhu: req.params.suhu,
+      //   deviceID: req.params.deviceID,
+      //   lembab: req.params.lembab,
+      //   tanggal: new Date(),
+      // };
+
+    const data =  await Monitor.create({
         suhu: req.params.suhu,
         deviceID: req.params.deviceID,
         lembab: req.params.lembab,
         tanggal: new Date(),
-      };
+      });
+
       // send to message broker
       // const queue = "monitor";
       // const conn = await amqplib.connect(
