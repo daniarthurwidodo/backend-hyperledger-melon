@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const Anomali = require("./anomali.model");
+const Monitor = require("../monitor/monitor.model");
 const anomaliRouter = Router();
 
 anomaliRouter.post("/tambah/", async (req, res) => {
@@ -40,30 +41,16 @@ anomaliRouter.post("/tambah/", async (req, res) => {
 
 anomaliRouter.get("/", async (req, res) => {
   try {
-    let date = req.query.tanggal;
-
-    if (date) {
-      date = new Date(date)
-      const message = await Anomali.find({ tanggal: date });
+    const message = await Monitor.find({isAnomali: true});
       res.status(200).send({
         status: true,
         message: message,
       });
       res.end();
-    } else if (!date) {
-      const message = await Anomali.find();
-      res.status(200).send({
-        status: true,
-        message: message,
-      });
-      res.end();
-    }
-
-    console.log("ambil data transaksi berhasil");
   } catch (error) {
     res.status(500).send({
       status: false,
-      message: "transaksi gagal",
+      message: "anomali error",
       error: error,
     });
     res.end();
