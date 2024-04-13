@@ -41,7 +41,8 @@ anomaliRouter.post("/tambah/", async (req, res) => {
 
 anomaliRouter.get("/", async (req, res) => {
   try {
-    const message = await Monitor.find({isAnomali: true});
+    let deviceId = req.body.deviceID
+    const message = await Monitor.find({isAnomali: true, deviceID: deviceId});
       res.status(200).send({
         status: true,
         message: message,
