@@ -6,6 +6,15 @@ const { randomUUID } = require("crypto");
 const { UUID } = require("bson");
 const mongoose = require("mongoose");
 const transaksiRouter = Router();
+const Pusher = require("pusher");
+
+const pusher = new Pusher({
+  appId: "1787407",
+  key: "acbf3ffd05480b00732c",
+  secret: "9b567fee6d12db55b36b",
+  cluster: "ap1",
+  useTLS: true,
+});
 
 transaksiRouter.get("/generateId", (req, res) => {
   const newId = new mongoose.mongo.ObjectId();
@@ -183,11 +192,11 @@ transaksiRouter.get("/status/:jenisTransaksi", async (req, res) => {
 });
 
 transaksiRouter.get("/all", async (req, res) => {
-  let query = req.query
+  let query = req.query;
 
   try {
     const status = await Transaksi.find({
-      ...query
+      ...query,
     })
       .skip(req.query.page)
       .limit(req.query.perPage)
@@ -211,7 +220,7 @@ transaksiRouter.get("/all", async (req, res) => {
 
 transaksiRouter.put("/update/:transaksiId", async (req, res) => {
   let _transaksiId = req.params.transaksiId;
-  let updateObject = req.body
+  let updateObject = req.body;
 
   console.log(updateObject);
   try {
