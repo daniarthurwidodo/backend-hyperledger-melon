@@ -79,7 +79,7 @@ notifRouter.post("/terbaca", async (req, res, next) => {
 
 notifRouter.get("/list/:userId", async (req, res, next) => {
   try {
-    let messages = await Notif.find({ pengirim: req.params.userId });
+    let messages = await Notif.find({ penerima: req.params.userId });
     if (messages.length === 0) {
       res.status(500).send({
         status: false,
