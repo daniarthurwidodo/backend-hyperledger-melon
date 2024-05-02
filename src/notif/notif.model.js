@@ -2,16 +2,11 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema
 
 const NotifSchema = new mongoose.Schema({
-  to: { type: String },
-  from: { type: String },
+  pengirim: { type: String },
+  penerima: { type: String },
   message: { type: String },
   date: {type: Date},
-  user: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
+  trxId: {type: String},
   isRead: {type: Boolean, default: false}
 });
 
