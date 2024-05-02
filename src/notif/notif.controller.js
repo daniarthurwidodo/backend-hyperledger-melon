@@ -52,23 +52,29 @@ notifRouter.post("/send", async (req, res, next) => {
   }
 });
 
-notifRouter.post("/terbaca", async (req, res, next) => {
+notifRouter.post("/terbaca/", async (req, res, next) => {
   try {
-    let _notifId = new mongoose.Types.ObjectId(req.body.notifId);
-    let notif = await Notif.findOneAndUpdate(
-      { _id: req.body.notifId },
-      { isRead: true }
-    );
-    console.log(notif, req.body.notifId, req.body);
-    res
-      .status(200)
-      .send({
-        status: true,
-        message: notif,
-      })
-      .end();
+    let users = req.body.users;
+
+    if (users.length > 0) {
+      for (let index = 0; index < users.length; index++) {
+        let _notifId = new mongoose.Types.ObjectId(req.params.notifId);
+        let notif = await Notif.findOneAndUpdate(
+          { _id: users[index] },
+          { isRead: true }
+        );
+        console.log(notif);
+      }
+      res
+        .status(200)
+        .send({
+          status: true,
+          message: notif,
+        })
+        .end();
+    }
   } catch (error) {
-    res.status(400).send({
+    res.status(501).send({
       status: false,
       message: "error",
       error: error,
@@ -81,7 +87,7 @@ notifRouter.get("/list/:userId", async (req, res, next) => {
   try {
     let messages = await Notif.find({ penerima: req.params.userId });
     if (messages.length === 0) {
-      res.status(500).send({
+      res.status(501).send({
         status: false,
         message: "user not found",
       });
