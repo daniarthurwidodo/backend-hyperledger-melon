@@ -55,7 +55,7 @@ notifRouter.post("/send", async (req, res, next) => {
 notifRouter.post("/terbaca/", async (req, res, next) => {
   try {
     let users = req.body.users;
-
+    let message = []
     if (users.length > 0) {
       for (let index = 0; index < users.length; index++) {
         let _notifId = new mongoose.Types.ObjectId(req.params.notifId);
@@ -64,12 +64,13 @@ notifRouter.post("/terbaca/", async (req, res, next) => {
           { isRead: true }
         );
         console.log(notif);
+        message.push(notif)
       }
       res
         .status(200)
         .send({
           status: true,
-          message: notif,
+          message: message,
         })
         .end();
     }
