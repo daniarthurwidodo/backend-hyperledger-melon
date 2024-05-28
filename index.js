@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -60,5 +62,4 @@ const options = {
 https.createServer(options, app).listen(8082);
 }
 
-runHttps();
-
+process.env.ENVIRONMENT === 'production' ? runHttps() : null ;

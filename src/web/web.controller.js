@@ -1,7 +1,8 @@
 const { Router } = require("express");
 const userWebModel = require("../user/user.model");
 const webBcrypt = require("bcryptjs"); // import bcrypt to hash passwords
-const webTransaksiModel = require("../transaksi/transaksi.model");
+const Notif = require("../notif/notif.model");
+const Transaksi = require("../transaksi/transaksi.model");
 
 const webRouter = Router();
 
@@ -51,16 +52,16 @@ webRouter.post("/user/login", async (req, res) => {
     const user = await userWebModel.findOne({ email: req.body.email });
     // const result = await webBcrypt.compare(req.body.password, user.password);
 
-    if (user &&  user.role === "admin") {
+    if (user && user.role === "admin") {
       res.status(200).send({ status: true, message: user });
       res.end();
-    } else if (user &&  user.role !== "admin") {
+    } else if (user && user.role !== "admin") {
       res.status(401).send({
         status: false,
         message: "anda bukan admin!",
       });
       res.end();
-    } else if (!user ) {
+    } else if (!user) {
       res.status(401).send({
         status: false,
         message: "harap periksa username / password",
@@ -83,77 +84,53 @@ webRouter.post("/user/login", async (req, res) => {
   }
 });
 
-webRouter.get('/transaksi/masuk', async (req, res) => {
-    const result = await webTransaksiModel.find({
-        jenisTransaksi: "MASUK"
-    }).populate(['pengirim', 'penerima', 'melon']);
+webRouter.get("/transaksi/", async (req, res) => {
+  try {
+    let request = req.body.jenisTransaksi;
+    const result = await Transaksi.find({
+      jenisTransaksi: request,
+    }).populate(["pengirim", "penerima", "melon"]);
 
-    if (result) {
-        res
+    res
       .status(200)
       .send({
         status: true,
         message: result,
       })
       .end();
-    } else {
-        res
-      .status(400)
+  } catch (error) {
+    res
+      .status(500)
       .send({
         status: false,
         message: "transaksi not found",
+        error: error,
       })
       .end();
   }
-})
+});
 
-webRouter.get('/transaksi/terkonfirmasi', async (req, res) => {
-    const result = await webTransaksiModel.find({
-        status: "TERKONFIRMASI"
-    }).populate(['pengirim', 'penerima', 'melon']);
+webRouter.get("/notif/all", async (req, res) => {
+  try {
+    const result = await Notif.find({});
 
-    if (result) {
-        res
+    res
       .status(200)
       .send({
         status: true,
         message: result,
       })
       .end();
-    } else {
-        res
-      .status(400)
+  } catch (error) {
+    res
+      .status(500)
       .send({
         status: false,
         message: "transaksi not found",
+        error: error,
       })
       .end();
   }
-})
-
-webRouter.get('/transaksi/keluar', async (req, res) => {
-    const result = await webTransaksiModel.find(
-        // { status: "TERKONFIRMASI"}
-    ).populate(['pengirim', 'penerima', 'melon']);
-
-    if (result) {
-        res
-      .status(200)
-      .send({
-        status: true,
-        message: result,
-      })
-      .end();
-    } else {
-        res
-      .status(400)
-      .send({
-        status: false,
-        message: "transaksi not found",
-      })
-      .end();
-  }
-})
-
+});
 
 module.exports = webRouter;
