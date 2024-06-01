@@ -85,12 +85,41 @@ webRouter.post("/user/login", async (req, res) => {
 });
 
 webRouter.get("/transaksi/", async (req, res) => {
-  try {
-    let request = req.body.jenisTransaksi;
-    const result = await Transaksi.find({
-      jenisTransaksi: request,
-    }).populate(["pengirim", "penerima", "melon"]);
+  let reqArr = [];
 
+  for (let i = 0; i < req.body.jenisTransaksi.length; i++) {
+    let result = await Transaksi.find({
+      jenisTransaksi: req.body.jenisTransaksi[i],
+    }).count();
+    reqArr.push({  name : req.body.jenisTransaksi[i] , result: result });
+  }
+  try {
+    res
+      .status(200)
+      .send({
+        status: true,
+        message: reqArr,
+      })
+      .end();
+  } catch (error) {
+    res
+      .status(500)
+      .send({
+        status: false,
+        message: "transaksi not found",
+        error: error,
+      })
+      .end();
+  }
+});
+
+webRouter.get("/transaksi/role", async (req, res) => {
+  try {
+    let request = req.body.role;
+    const result = await Transaksi.find().populate({
+      path: "pengirim",
+      match: { role: { $eq: request } },
+    });
     res
       .status(200)
       .send({
