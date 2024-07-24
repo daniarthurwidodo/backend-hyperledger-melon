@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "start": "npx pm2 start index.js",
+    "start": "npx pm2 start index.js --name backend-server-hplf",
     "dev": "npx nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
