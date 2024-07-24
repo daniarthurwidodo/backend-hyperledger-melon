@@ -56,8 +56,8 @@ const https = require("https"),
  fs = require("fs");
 
 const options = {
-  key: fs.readFileSync("/etc/ssl/private/private.key"),
-  cert: fs.readFileSync("/etc/ssl/certificate.crt"),
+  key: fs.readFileSync("./private.key"),
+  cert: fs.readFileSync("./certificate.crt"),
 };
 https.createServer(options, app).listen(8082);
 }
