@@ -7,6 +7,7 @@ const { UUID } = require("bson");
 const mongoose = require("mongoose");
 const transaksiRouter = Router();
 const Pusher = require("pusher");
+const request = require("request");
 
 const pusher = new Pusher({
   appId: "1787407",
@@ -75,6 +76,50 @@ transaksiRouter.post("/tambah", async (req, res) => {
       timeline: [...req.body.timeline],
     };
     if (pengirim && penerima) {
+      // if jenisTransaksi == tx_terkonfirmasi_retail || tx_terkonfirmasi_distributor send  to blockchaiin
+      if (
+        sendObj.jenisTransaksi === "tx_terkonfirmasi_retail" ||
+        sendObj.jenisTransaksi === "tx_terkonfirmasi_distributor"
+      ) {
+        var headersOpt = {
+          "content-type": "application/json",
+        };
+        request(
+          {
+            method: "post",
+            url: `http://localhost:8085/create/basic`,
+            body: {
+              ID: req.body.transaksiId,
+              pengirim: pengirim._id,
+              penerima: penerima._id,
+              melon: melon._id,
+              tanggalTanam: req.body.tanggalTanam,
+              tanggalPanen: req.body.tanggalPanen,
+              kuantitas: req.body.kuantitas,
+              jenisTanaman: req.body.jenisTanaman,
+              jenisTransaksi: req.body.jenisTransaksi,
+              suhu: req.body.suhu,
+              harga: req.body.harga,
+              lamaPenyimpanan: req.body.lamaSimpan,
+              timeline01: JSON.stringify(req.body.timeline[0]) ,
+              timeline02: JSON.stringify(req.body.timeline[1]),
+              timeline03: JSON.stringify(req.body.timeline[2]),
+              timeline04: JSON.stringify(req.body.timeline[3]),
+              timeline05: JSON.stringify(req.body.timeline[4]),
+              timeline06: JSON.stringify(req.body.timeline[5]),
+              timeline07: JSON.stringify(req.body.timeline[6]),
+              timeline08: JSON.stringify(req.body.timeline[7]),
+              timeline09: JSON.stringify(req.body.timeline[8]),
+            },
+            headers: headersOpt,
+            json: true,
+          },
+          function (error, response, body) {
+            //Print the Response
+            console.log(body);
+          }
+        );
+      }
       let _transaksi = await Transaksi.create(sendObj);
       console.log("transaksi berhasil ke database");
       res.status(200).send({
@@ -82,7 +127,6 @@ transaksiRouter.post("/tambah", async (req, res) => {
         message: _transaksi,
       });
       res.end();
-
     } else {
       res.status(500).send({
         status: false,
