@@ -81,13 +81,14 @@ transaksiRouter.post("/tambah", async (req, res) => {
         sendObj.jenisTransaksi === "tx_terkonfirmasi_retail" ||
         sendObj.jenisTransaksi === "tx_terkonfirmasi_distributor"
       ) {
-        var headersOpt = {
+        const headersOpt = {
           "content-type": "application/json",
         };
+        const chaincode = 'melon'
         request(
           {
             method: "post",
-            url: `http://localhost:8085/create/basic`,
+            url: `http://localhost:8085/create/${chaincode}`,
             body: {
               ID: req.body.transaksiId,
               pengirim: pengirim._id,
