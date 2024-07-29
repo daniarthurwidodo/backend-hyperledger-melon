@@ -96,6 +96,7 @@ transaksiRouter.post("/tambah", async (req, res) => {
               pengirim: pengirim._id,
               penerima: penerima._id,
               melon: melon._id,
+              noRak: req.body.noRak,
               tanggalTanam: req.body.tanggalTanam,
               tanggalPanen: req.body.tanggalPanen,
               kuantitas: req.body.kuantitas,
