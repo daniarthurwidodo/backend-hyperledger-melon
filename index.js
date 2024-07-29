@@ -18,7 +18,7 @@ const path = require("path");
 
 const config = require("./config.json");
 
-const PORT = 4001;
+const PORT = 8888;
 // global middleware
 const app = express();
 app.use(cors()); // add cors headers
