@@ -77,7 +77,6 @@ transaksiRouter.post("/tambah", async (req, res) => {
     };
     if (pengirim && penerima) {
       // if jenisTransaksi == tx_terkonfirmasi_retail || tx_terkonfirmasi_distributor send  to blockchaiin
-      console.log("jenisTransaksi === ", sendObj.jenisTransaksi);
       if (
         sendObj.jenisTransaksi === "tx_terkonfirmasi_retail" ||
         sendObj.jenisTransaksi === "tx_terkonfirmasi_distributor" || 
@@ -188,6 +187,53 @@ transaksiRouter.post("/tx-keluar", async (req, res) => {
       timeline: [...req.body.timeline],
     };
     if (pengirim) {
+      if (
+        sendObj.jenisTransaksi === "tx_terkonfirmasi_retail" ||
+        sendObj.jenisTransaksi === "tx_terkonfirmasi_distributor" || 
+        sendObj.jenisTransaksi === "tx_terkonfirmasi_retail_keluar"
+      ) {
+        const headersOpt = {
+          "content-type": "application/json",
+        };
+        const chaincode = 'melon'
+        request(
+          {
+            method: "post",
+            url: `http://localhost:8085/create/${chaincode}`,
+            body: {
+              ID: req.body.transaksiId,
+              pengirim: pengirim._id,
+              penerima: penerima._id,
+              melon: melon._id,
+              noRak: req.body.noRak,
+              tanggalTanam: req.body.tanggalTanam,
+              tanggalPanen: req.body.tanggalPanen,
+              kuantitas: req.body.kuantitas,
+              jenisTanaman: req.body.jenisTanaman,
+              jenisTransaksi: req.body.jenisTransaksi,
+              suhu: req.body.suhu,
+              harga: req.body.harga,
+              lamaPenyimpanan: req.body.lamaSimpan,
+              timeline01: JSON.stringify(req.body.timeline[0]) ,
+              timeline02: JSON.stringify(req.body.timeline[1]),
+              timeline03: JSON.stringify(req.body.timeline[2]),
+              timeline04: JSON.stringify(req.body.timeline[3]),
+              timeline05: JSON.stringify(req.body.timeline[4]),
+              timeline06: JSON.stringify(req.body.timeline[5]),
+              timeline07: JSON.stringify(req.body.timeline[6]),
+              timeline08: JSON.stringify(req.body.timeline[7]),
+              timeline09: JSON.stringify(req.body.timeline[8]),
+            },
+            headers: headersOpt,
+            json: true,
+          },
+          function (error, response, body) {
+            //Print the Response
+            console.log(body);
+          }
+        );
+      }
+      
       let _transaksi = await Transaksi.create(sendObj);
       console.log("transaksi berhasil ke database");
       res.status(200).send({
