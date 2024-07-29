@@ -203,7 +203,7 @@ transaksiRouter.post("/tx-keluar", async (req, res) => {
             body: {
               ID: req.body.transaksiId,
               pengirim: pengirim._id,
-              penerima: penerima._id,
+              penerima: "",
               melon: melon._id,
               noRak: req.body.noRak,
               tanggalTanam: req.body.tanggalTanam,
@@ -233,7 +233,7 @@ transaksiRouter.post("/tx-keluar", async (req, res) => {
           }
         );
       }
-      
+
       let _transaksi = await Transaksi.create(sendObj);
       console.log("transaksi berhasil ke database");
       res.status(200).send({
