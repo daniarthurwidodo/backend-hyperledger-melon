@@ -79,7 +79,8 @@ transaksiRouter.post("/tambah", async (req, res) => {
       // if jenisTransaksi == tx_terkonfirmasi_retail || tx_terkonfirmasi_distributor send  to blockchaiin
       if (
         sendObj.jenisTransaksi === "tx_terkonfirmasi_retail" ||
-        sendObj.jenisTransaksi === "tx_terkonfirmasi_distributor"
+        sendObj.jenisTransaksi === "tx_terkonfirmasi_distributor" || 
+        sendObj.jenisTransaksi === "tx_terkonfirmasi_retail_keluar"
       ) {
         const headersOpt = {
           "content-type": "application/json",
