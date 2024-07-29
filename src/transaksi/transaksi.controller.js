@@ -77,6 +77,7 @@ transaksiRouter.post("/tambah", async (req, res) => {
     };
     if (pengirim && penerima) {
       // if jenisTransaksi == tx_terkonfirmasi_retail || tx_terkonfirmasi_distributor send  to blockchaiin
+      console.log("jenisTransaksi === ", sendObj.jenisTransaksi);
       if (
         sendObj.jenisTransaksi === "tx_terkonfirmasi_retail" ||
         sendObj.jenisTransaksi === "tx_terkonfirmasi_distributor" || 
